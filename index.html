@@ -1,0 +1,2230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asesoría Estructuración Societaria – Alejandro Forero Rueda</title>
+<style>
+  :root {
+    --azul-oscuro: #0d2137;
+    --azul-medio: #1a3a5c;
+    --azul-claro: #2563a8;
+    --verde: #16a34a;
+    --verde-claro: #dcfce7;
+    --rojo: #dc2626;
+    --rojo-claro: #fee2e2;
+    --amarillo: #d97706;
+    --amarillo-claro: #fef3c7;
+    --gris-claro: #f8fafc;
+    --gris: #64748b;
+    --blanco: #ffffff;
+    --sombra: 0 4px 24px rgba(13,33,55,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef2f7; color: #1e293b; }
+
+  /* NAV */
+  nav {
+    background: var(--azul-oscuro);
+    color: #fff;
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+  .nav-row1 {
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .nav-row2 {
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    background: #162d45;
+  }
+  .nav-brand {
+    padding: 12px 20px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    letter-spacing: 0.02em;
+    color: #93c5fd;
+    white-space: nowrap;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    flex-shrink: 0;
+  }
+  .nav-btn {
+    padding: 11px 16px;
+    color: #cbd5e1;
+    cursor: pointer;
+    font-size: 0.80rem;
+    font-weight: 500;
+    white-space: nowrap;
+    border: none;
+    background: none;
+    transition: background 0.2s, color 0.2s;
+    border-bottom: 3px solid transparent;
+    flex-shrink: 0;
+  }
+  .nav-btn:hover { color: #fff; background: rgba(255,255,255,0.07); }
+  .nav-btn.active { color: #60a5fa; border-bottom: 3px solid #60a5fa; background: rgba(96,165,250,0.08); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul-medio) 60%, #1e4d8c 100%);
+    color: #fff;
+    padding: 56px 24px 40px;
+    text-align: center;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(96,165,250,0.18);
+    border: 1px solid rgba(96,165,250,0.4);
+    color: #93c5fd;
+    padding: 4px 16px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .hero h1 { font-size: 2.1rem; font-weight: 800; letter-spacing: -0.01em; margin-bottom: 8px; }
+  .hero h2 { font-size: 1.1rem; font-weight: 400; color: #93c5fd; margin-bottom: 6px; }
+  .hero p { font-size: 0.88rem; color: #64748b; color: #94a3b8; }
+  .hero-meta { margin-top: 20px; display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; }
+  .hero-meta-item { text-align: center; }
+  .hero-meta-item .val { font-size: 1.45rem; font-weight: 800; color: #60a5fa; }
+  .hero-meta-item .lbl { font-size: 0.72rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* PAGES */
+  .page { display: none; max-width: 1200px; margin: 0 auto; padding: 32px 20px 60px; }
+  .page.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--blanco);
+    border-radius: 14px;
+    box-shadow: var(--sombra);
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+  .card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--azul-oscuro);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .icon { font-size: 1.2rem; }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+  @media(max-width:800px) {
+    .grid-2,.grid-3,.grid-4 { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 1.5rem; }
+  }
+
+  /* KPI CARDS */
+  .kpi-card {
+    background: var(--blanco);
+    border-radius: 12px;
+    box-shadow: var(--sombra);
+    padding: 22px 20px;
+    border-left: 5px solid var(--azul-claro);
+  }
+  .kpi-card.verde { border-left-color: var(--verde); }
+  .kpi-card.rojo { border-left-color: var(--rojo); }
+  .kpi-card.amarillo { border-left-color: var(--amarillo); }
+  .kpi-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gris); margin-bottom: 6px; }
+  .kpi-value { font-size: 1.55rem; font-weight: 800; color: var(--azul-oscuro); }
+  .kpi-sub { font-size: 0.75rem; color: var(--gris); margin-top: 4px; }
+
+  /* RIESGO */
+  .riesgo-alto { background: var(--rojo-claro); border: 1px solid #fca5a5; border-radius: 10px; padding: 16px 18px; margin-bottom: 12px; }
+  .riesgo-medio { background: var(--amarillo-claro); border: 1px solid #fcd34d; border-radius: 10px; padding: 16px 18px; margin-bottom: 12px; }
+  .riesgo-bajo { background: var(--verde-claro); border: 1px solid #86efac; border-radius: 10px; padding: 16px 18px; margin-bottom: 12px; }
+  .riesgo-titulo { font-weight: 700; font-size: 0.9rem; margin-bottom: 5px; }
+  .riesgo-alto .riesgo-titulo { color: #991b1b; }
+  .riesgo-medio .riesgo-titulo { color: #92400e; }
+  .riesgo-bajo .riesgo-titulo { color: #166534; }
+  .riesgo-desc { font-size: 0.83rem; color: #374151; line-height: 1.5; }
+
+  /* TABLA */
+  table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  th { background: var(--azul-oscuro); color: #fff; padding: 10px 14px; text-align: left; font-weight: 600; font-size: 0.78rem; letter-spacing: 0.04em; }
+  td { padding: 10px 14px; border-bottom: 1px solid #e2e8f0; }
+  tr:hover td { background: #f1f5f9; }
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .tag-verde { background: var(--verde-claro); color: #166534; }
+  .tag-rojo { background: var(--rojo-claro); color: #991b1b; }
+  .tag-amarillo { background: var(--amarillo-claro); color: #92400e; }
+  .tag-azul { background: #dbeafe; color: #1e40af; }
+
+  /* PASOS */
+  .paso {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 20px;
+    align-items: flex-start;
+  }
+  .paso-num {
+    min-width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--azul-claro);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .paso-contenido h4 { font-size: 0.95rem; font-weight: 700; color: var(--azul-oscuro); margin-bottom: 4px; }
+  .paso-contenido p { font-size: 0.83rem; color: #475569; line-height: 1.55; }
+  .paso-contenido .monto { font-size: 0.8rem; font-weight: 600; color: var(--verde); margin-top: 4px; }
+
+  /* COMPARATIVO */
+  .comp-col { border-radius: 12px; overflow: hidden; box-shadow: var(--sombra); }
+  .comp-header {
+    padding: 18px 20px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    text-align: center;
+  }
+  .comp-header.pn { background: linear-gradient(135deg,#6366f1,#4f46e5); }
+  .comp-header.sas { background: linear-gradient(135deg,var(--azul-claro),var(--azul-oscuro)); }
+  .comp-body { background: #fff; }
+  .comp-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 18px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.83rem;
+  }
+  .comp-row:last-child { border-bottom: none; }
+  .comp-row .lbl { color: #64748b; }
+  .comp-row .val { font-weight: 700; color: var(--azul-oscuro); }
+  .comp-row.destacado { background: #f0f9ff; }
+  .comp-row.rojo-row .val { color: var(--rojo); }
+  .comp-row.verde-row .val { color: var(--verde); }
+
+  /* BAR CHART */
+  .barchart { margin-top: 8px; }
+  .bar-item { margin-bottom: 14px; }
+  .bar-label { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px; color: #374151; }
+  .bar-track { background: #e2e8f0; border-radius: 999px; height: 12px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 999px; transition: width 0.8s ease; }
+  .bar-azul { background: linear-gradient(90deg, var(--azul-claro), #60a5fa); }
+  .bar-verde { background: linear-gradient(90deg, var(--verde), #4ade80); }
+  .bar-rojo { background: linear-gradient(90deg, var(--rojo), #f87171); }
+  .bar-amarillo { background: linear-gradient(90deg, var(--amarillo), #fbbf24); }
+
+  /* ALERTAS */
+  .alerta {
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .alerta-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+  .alerta-info { background: #dbeafe; border: 1px solid #93c5fd; color: #1e40af; }
+  .alerta-warn { background: var(--amarillo-claro); border: 1px solid #fcd34d; color: #92400e; }
+  .alerta-ok { background: var(--verde-claro); border: 1px solid #86efac; color: #166534; }
+  .alerta-danger { background: var(--rojo-claro); border: 1px solid #fca5a5; color: #991b1b; }
+
+  /* TIMELINE */
+  .timeline { border-left: 3px solid var(--azul-claro); padding-left: 24px; margin-left: 10px; }
+  .tl-item { position: relative; margin-bottom: 22px; }
+  .tl-dot {
+    position: absolute;
+    left: -32px;
+    top: 3px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--azul-claro);
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 2px var(--azul-claro);
+  }
+  .tl-mes { font-size: 0.72rem; font-weight: 700; color: var(--azul-claro); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+  .tl-titulo { font-size: 0.92rem; font-weight: 700; color: var(--azul-oscuro); margin-bottom: 3px; }
+  .tl-desc { font-size: 0.81rem; color: #475569; line-height: 1.5; }
+
+  /* PILL TABS */
+  .pill-tabs { display: flex; gap: 8px; margin-bottom: 22px; flex-wrap: wrap; }
+  .pill-tab {
+    padding: 7px 18px;
+    border-radius: 999px;
+    border: 2px solid #e2e8f0;
+    background: #fff;
+    color: #64748b;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .pill-tab.active, .pill-tab:hover {
+    background: var(--azul-claro);
+    border-color: var(--azul-claro);
+    color: #fff;
+  }
+  .pill-content { display: none; }
+  .pill-content.active { display: block; }
+
+  /* TOOLTIP */
+  .tooltip-wrap { position: relative; display: inline-block; }
+  .tooltip-icon { cursor: pointer; color: var(--azul-claro); font-size: 0.85rem; margin-left: 4px; }
+  .tooltip-box {
+    display: none;
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--azul-oscuro);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    width: 220px;
+    z-index: 50;
+  }
+  .tooltip-wrap:hover .tooltip-box { display: block; }
+
+  /* PRINT */
+  @media print {
+    nav { display: none; }
+    .page { display: block !important; max-width: 100%; }
+    .hero { padding: 30px; }
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--azul-oscuro);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, var(--azul-claro), transparent);
+    border-radius: 999px;
+  }
+
+  .monto-cop { color: var(--azul-oscuro); font-weight: 700; }
+  .nota { font-size: 0.75rem; color: var(--gris); font-style: italic; margin-top: 6px; }
+  footer {
+    background: var(--azul-oscuro);
+    color: #94a3b8;
+    text-align: center;
+    padding: 18px;
+    font-size: 0.75rem;
+    margin-top: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Asesoría Societaria &amp; Fiscal · Colombia 2025</div>
+  <h1>Alejandro José Forero Rueda</h1>
+  <h2>Estructuración Societaria para Protección Patrimonial</h2>
+  <p>NIT 72.215.179-5 · CIIU 4530 · Comercio de Repuestos y Accesorios para Vehículos</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <div class="val">$9.539M</div>
+      <div class="lbl">Ingresos Brutos 2025</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="val">$4.063M</div>
+      <div class="lbl">Patrimonio Bruto</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="val">$1.796M</div>
+      <div class="lbl">Patrimonio Líquido</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="val">$88.2M</div>
+      <div class="lbl">Impuesto de Renta 2025</div>
+    </div>
+  </div>
+</div>
+
+<!-- NAVEGACIÓN -->
+<nav>
+  <div class="nav-row1">
+    <div class="nav-brand">📊 Forero &amp; Cía.</div>
+    <button class="nav-btn active" onclick="showPage(this,'resumen')">📊 Resumen Ejecutivo</button>
+    <button class="nav-btn" onclick="showPage(this,'financiero')">📈 Análisis Financiero</button>
+    <button class="nav-btn" onclick="showPage(this,'riesgos')">🚨 Riesgos Actuales</button>
+    <button class="nav-btn" onclick="showPage(this,'comparativo')">⚖️ PN vs SAS</button>
+    <button class="nav-btn" onclick="showPage(this,'fiscal')">🧮 Análisis Fiscal</button>
+  </div>
+  <div class="nav-row2">
+    <div class="nav-brand" style="font-size:0.72rem;color:#64748b;letter-spacing:0.1em;text-transform:uppercase">Más secciones</div>
+    <button class="nav-btn" onclick="showPage(this,'constitucion')">🏛️ Constitución SAS</button>
+    <button class="nav-btn" onclick="showPage(this,'hoja-ruta')">🗺️ Hoja de Ruta</button>
+    <button class="nav-btn" onclick="showPage(this,'recomendaciones')">✅ Recomendaciones</button>
+    <button class="nav-btn" onclick="showPage(this,'requisitos')" style="color:#fbbf24;font-weight:700">⚖️ Requisitos Legales y Costos</button>
+  </div>
+</nav>
+
+<!-- ===========================
+     PÁGINA 1: RESUMEN EJECUTIVO
+     =========================== -->
+<div id="page-resumen" class="page active">
+
+  <p class="section-title">🎯 Resumen Ejecutivo</p>
+
+  <div class="alerta alerta-warn">
+    <div class="alerta-icon">⚠️</div>
+    <div><strong>Situación Actual:</strong> Alejandro opera su negocio de repuestos (ingresos ~$9.500M/año) completamente como persona natural, exponiendo su patrimonio personal de $4.063M —incluyendo casa de habitación, vehículos e inversiones— a los riesgos propios de la actividad comercial.</div>
+  </div>
+
+  <div class="grid-4" style="margin-bottom:24px">
+    <div class="kpi-card rojo">
+      <div class="kpi-label">Patrimonio Expuesto</div>
+      <div class="kpi-value">$4.063M</div>
+      <div class="kpi-sub">100% en riesgo como PN</div>
+    </div>
+    <div class="kpi-card amarillo">
+      <div class="kpi-label">Inventarios</div>
+      <div class="kpi-value">$1.747M</div>
+      <div class="kpi-sub">Principal activo del negocio</div>
+    </div>
+    <div class="kpi-card verde">
+      <div class="kpi-label">Renta Líquida</div>
+      <div class="kpi-value">$352.5M</div>
+      <div class="kpi-sub">Cédula general 2025</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Deudas Actuales</div>
+      <div class="kpi-value">$2.268M</div>
+      <div class="kpi-sub">Cuentas por pagar</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="icon">🏢</span>¿Por qué constituir una SAS?</div>
+      <div class="riesgo-bajo">
+        <div class="riesgo-titulo">✅ Limitación de Responsabilidad</div>
+        <div class="riesgo-desc">La Ley 1258/2008 establece que los accionistas solo responden hasta el monto de sus aportes. Las deudas y demandas contra la SAS NO afectan el patrimonio personal de Alejandro.</div>
+      </div>
+      <div class="riesgo-bajo">
+        <div class="riesgo-titulo">✅ Separación Patrimonio Personal / Empresarial</div>
+        <div class="riesgo-desc">Casa de habitación, vehículos personales y ahorros quedan completamente blindados del riesgo comercial.</div>
+      </div>
+      <div class="riesgo-bajo">
+        <div class="riesgo-titulo">✅ Continuidad Empresarial</div>
+        <div class="riesgo-desc">La empresa sobrevive a eventos personales (fallecimiento, incapacidad, quiebra personal). Mayor credibilidad ante proveedores y bancos.</div>
+      </div>
+      <div class="riesgo-bajo">
+        <div class="riesgo-titulo">✅ Planeación Fiscal y Sucesoral</div>
+        <div class="riesgo-desc">Permite diferir dividendos, reinvertir utilidades y estructurar mejor la carga tributaria a largo plazo.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">⚡</span>Situación de Riesgo Actual</div>
+      <div class="riesgo-alto">
+        <div class="riesgo-titulo">🔴 Embargo de Bienes Personales</div>
+        <div class="riesgo-desc">Un proveedor, cliente o acreedor puede demandar directamente a Alejandro y embargar su casa de habitación ($128M), cuentas bancarias, vehículos y otros activos.</div>
+      </div>
+      <div class="riesgo-alto">
+        <div class="riesgo-titulo">🔴 Responsabilidad Fiscal Ilimitada</div>
+        <div class="riesgo-desc">Como PN, responde con TODO su patrimonio ante la DIAN por obligaciones tributarias del negocio.</div>
+      </div>
+      <div class="riesgo-medio">
+        <div class="riesgo-titulo">🟡 Riesgo Laboral</div>
+        <div class="riesgo-desc">Demandas de empleados o contratistas van directamente contra el patrimonio personal del empresario.</div>
+      </div>
+      <div class="riesgo-medio">
+        <div class="riesgo-titulo">🟡 Riesgo de Tránsito / Accidentes</div>
+        <div class="riesgo-desc">Si vehículos del negocio están a nombre personal, accidentes pueden comprometer el patrimonio total.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🎯</span>Recomendación Central</div>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start">
+      <div style="flex:1;min-width:200px">
+        <div style="font-size:1.6rem;font-weight:900;color:var(--azul-claro);margin-bottom:6px">Constituir SAS</div>
+        <div style="font-size:0.88rem;color:#475569;line-height:1.6">
+          Se recomienda constituir una <strong>Sociedad por Acciones Simplificada (SAS)</strong> para el negocio de repuestos, transfiriendo operación, inventarios y activos comerciales a la nueva entidad. El patrimonio personal de Alejandro (casa, ahorros, inversiones personales) permanece separado y protegido.
+        </div>
+      </div>
+      <div style="flex:1;min-width:200px">
+        <div class="barchart">
+          <div class="bar-item">
+            <div class="bar-label"><span>Protección Patrimonial</span><span>95%</span></div>
+            <div class="bar-track"><div class="bar-fill bar-verde" style="width:95%"></div></div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label"><span>Simplicidad Constitución</span><span>90%</span></div>
+            <div class="bar-track"><div class="bar-fill bar-azul" style="width:90%"></div></div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label"><span>Flexibilidad Societaria</span><span>95%</span></div>
+            <div class="bar-track"><div class="bar-fill bar-verde" style="width:95%"></div></div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label"><span>Costo Adicional vs PN</span><span>35%</span></div>
+            <div class="bar-track"><div class="bar-fill bar-amarillo" style="width:35%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===========================
+     PÁGINA 2: ANÁLISIS FINANCIERO
+     =========================== -->
+<div id="page-financiero" class="page">
+
+  <p class="section-title">📈 Análisis Financiero</p>
+
+  <div class="grid-4" style="margin-bottom:24px">
+    <div class="kpi-card">
+      <div class="kpi-label">Ingresos Brutos No Laborales</div>
+      <div class="kpi-value" style="font-size:1.2rem">$9.378M</div>
+      <div class="kpi-sub">Casilla 74 · Formulario 210</div>
+    </div>
+    <div class="kpi-card amarillo">
+      <div class="kpi-label">Ingresos Rentas Capital</div>
+      <div class="kpi-value" style="font-size:1.2rem">$161.2M</div>
+      <div class="kpi-sub">Casilla 58 · Formulario 210</div>
+    </div>
+    <div class="kpi-card rojo">
+      <div class="kpi-label">Costos y Deducciones</div>
+      <div class="kpi-value" style="font-size:1.2rem">$8.603M</div>
+      <div class="kpi-sub">Casilla 77 · Incluye inventario</div>
+    </div>
+    <div class="kpi-card verde">
+      <div class="kpi-label">Margen Operacional</div>
+      <div class="kpi-value">3.7%</div>
+      <div class="kpi-sub">Sector repuestos Colombia</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="icon">🏦</span>Composición del Patrimonio Bruto ($4.063M)</div>
+      <div class="barchart">
+        <div class="bar-item">
+          <div class="bar-label"><span>Cuentas por Cobrar</span><span>$1.856M (45.7%)</span></div>
+          <div class="bar-track"><div class="bar-fill bar-azul" style="width:45.7%"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label"><span>Inventarios</span><span>$1.747M (43.0%)</span></div>
+          <div class="bar-track"><div class="bar-fill bar-verde" style="width:43%"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label"><span>Otros Activos</span><span>$167M (4.1%)</span></div>
+          <div class="bar-track"><div class="bar-fill bar-amarillo" style="width:4.1%"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label"><span>Casa Habitación</span><span>$128M (3.2%)</span></div>
+          <div class="bar-track"><div class="bar-fill bar-amarillo" style="width:3.2%"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label"><span>Propiedad Planta Equipo</span><span>$72.6M (1.8%)</span></div>
+          <div class="bar-track"><div class="bar-fill bar-rojo" style="width:1.8%"></div></div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label"><span>Efectivo</span><span>$94M (2.3%)</span></div>
+          <div class="bar-track"><div class="bar-fill bar-azul" style="width:2.3%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">📊</span>Estado de Resultados Simplificado 2025</div>
+      <table>
+        <tr><th>Concepto</th><th style="text-align:right">Valor COP</th></tr>
+        <tr><td>Ingresos Brutos No Laborales</td><td style="text-align:right;font-weight:700">$9.378.306.000</td></tr>
+        <tr><td>Ingresos Rentas de Capital</td><td style="text-align:right;font-weight:700">$161.235.000</td></tr>
+        <tr><td>(-) Devoluciones y Descuentos</td><td style="text-align:right;color:var(--rojo)">($566.901.000)</td></tr>
+        <tr><td>(-) Costos y Deducciones</td><td style="text-align:right;color:var(--rojo)">($8.602.898.000)</td></tr>
+        <tr><td>(-) Ingresos No Constitutivos de Renta</td><td style="text-align:right;color:var(--rojo)">($17.243.000)</td></tr>
+        <tr style="background:#f0fdf4"><td><strong>Renta Líquida Total (Cédula General)</strong></td><td style="text-align:right;font-weight:800;color:var(--verde)">$352.499.000</td></tr>
+        <tr><td>(-) Impuesto de Renta</td><td style="text-align:right;color:var(--rojo)">($88.188.000)</td></tr>
+        <tr style="background:#eff6ff"><td><strong>Resultado Neto Aproximado</strong></td><td style="text-align:right;font-weight:800;color:var(--azul-claro)">$264.311.000</td></tr>
+      </table>
+      <div class="nota">* Datos extraídos del Formulario 210 año gravable 2025. Retenciones acumuladas: $81.023M.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">⚖️</span>Indicadores Financieros Clave</div>
+    <div class="grid-3">
+      <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:10px">
+        <div style="font-size:2rem;font-weight:900;color:var(--azul-claro)">3.7%</div>
+        <div style="font-size:0.8rem;color:var(--gris);margin-top:4px">Margen Neto sobre Ingresos</div>
+        <div style="font-size:0.72rem;color:var(--gris);margin-top:2px">$352M / $9.539M</div>
+      </div>
+      <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:10px">
+        <div style="font-size:2rem;font-weight:900;color:var(--verde)">25%</div>
+        <div style="font-size:0.8rem;color:var(--gris);margin-top:4px">Tasa Efectiva de Tributación</div>
+        <div style="font-size:0.72rem;color:var(--gris);margin-top:2px">$88.2M / $352.5M</div>
+      </div>
+      <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:10px">
+        <div style="font-size:2rem;font-weight:900;color:var(--amarillo)">44.2%</div>
+        <div style="font-size:0.8rem;color:var(--gris);margin-top:4px">Endeudamiento sobre Patrimonio</div>
+        <div style="font-size:0.72rem;color:var(--gris);margin-top:2px">$2.268M / $4.063M</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alerta alerta-info">
+    <div class="alerta-icon">ℹ️</div>
+    <div><strong>Impuesto al Patrimonio:</strong> Con un patrimonio líquido de $1.795M, Alejandro NO es sujeto del impuesto al patrimonio para 2025 (el umbral es $3.770M = 72.000 UVT × $52.374). Si el negocio crece, podría quedar expuesto en próximos años.</div>
+  </div>
+
+</div>
+
+<!-- ===========================
+     PÁGINA 3: RIESGOS ACTUALES
+     =========================== -->
+<div id="page-riesgos" class="page">
+
+  <p class="section-title">🚨 Análisis de Riesgos como Persona Natural</p>
+
+  <div class="alerta alerta-danger">
+    <div class="alerta-icon">🔴</div>
+    <div><strong>Exposición total:</strong> Como persona natural, Alejandro responde con la TOTALIDAD de su patrimonio ($4.063M) por todas las obligaciones del negocio. No existe separación legal entre sus bienes personales y los del negocio.</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="icon">⚖️</span>Riesgos Comerciales y Civiles</div>
+
+      <div class="riesgo-alto">
+        <div class="riesgo-titulo">🔴 ALTO · Demandas de Proveedores</div>
+        <div class="riesgo-desc">Con $2.268M en cuentas por pagar, cualquier incumplimiento habilita a proveedores para demandar directamente a Alejandro e iniciar proceso ejecutivo sobre sus bienes personales: casa ($128M), vehículos, cuentas bancarias.</div>
+      </div>
+
+      <div class="riesgo-alto">
+        <div class="riesgo-titulo">🔴 ALTO · Demandas de Clientes (Garantías / Productos)</div>
+        <div class="riesgo-desc">Si un repuesto defectuoso causa un accidente o daño, el cliente puede demandar civilmente. Como PN, el embargo puede alcanzar la vivienda habitual (con las restricciones del art. 594 CGP).</div>
+      </div>
+
+      <div class="riesgo-medio">
+        <div class="riesgo-titulo">🟡 MEDIO · Competencia Desleal / Infracciones</div>
+        <div class="riesgo-desc">Reclamaciones por marcas, patentes o competencia desleal recaen directamente sobre el patrimonio personal.</div>
+      </div>
+
+      <div class="riesgo-medio">
+        <div class="riesgo-titulo">🟡 MEDIO · Contratos de Arrendamiento Locales</div>
+        <div class="riesgo-desc">Si los locales comerciales están a su nombre personal, el propietario puede ejecutar garantías sobre bienes personales.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">👷</span>Riesgos Laborales y Fiscales</div>
+
+      <div class="riesgo-alto">
+        <div class="riesgo-titulo">🔴 ALTO · Demandas Laborales</div>
+        <div class="riesgo-desc">Empleados o contratistas que demanden por prestaciones sociales, acoso laboral o despido injusto llevan el proceso contra Alejandro personalmente. El Juzgado Laboral puede ordenar embargo de bienes.</div>
+      </div>
+
+      <div class="riesgo-alto">
+        <div class="riesgo-titulo">🔴 ALTO · Obligaciones Tributarias DIAN</div>
+        <div class="riesgo-desc">Errores en declaraciones de renta, IVA o retenciones generan sanciones e intereses. La DIAN puede iniciar cobro coactivo embargando cuentas, inmuebles y bienes muebles sin necesidad de proceso judicial.</div>
+      </div>
+
+      <div class="riesgo-medio">
+        <div class="riesgo-titulo">🟡 MEDIO · Accidentes de Tránsito</div>
+        <div class="riesgo-desc">Si vehículos de distribución están registrados a nombre de Alejandro, accidentes generan responsabilidad civil extracontractual ilimitada.</div>
+      </div>
+
+      <div class="riesgo-bajo">
+        <div class="riesgo-titulo">🟢 BAJO · Impuesto al Patrimonio (Hoy)</div>
+        <div class="riesgo-desc">Con PL de $1.795M el umbral de $3.770M no se supera. Sin embargo, si el negocio crece o se valorizan activos, podría quedar gravado con 0.5% a 1.5% adicional.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🏠</span>Activos Personales en Riesgo</div>
+    <table>
+      <tr>
+        <th>Activo</th>
+        <th style="text-align:right">Valor Aprox.</th>
+        <th>Nivel de Riesgo Actual</th>
+        <th>Protección con SAS</th>
+      </tr>
+      <tr>
+        <td>Casa de Habitación</td>
+        <td style="text-align:right">$128.004.147</td>
+        <td><span class="tag tag-amarillo">MEDIO</span></td>
+        <td><span class="tag tag-verde">✅ Protegida</span></td>
+      </tr>
+      <tr>
+        <td>Inventarios del Negocio</td>
+        <td style="text-align:right">$1.746.585.000</td>
+        <td><span class="tag tag-rojo">ALTO</span></td>
+        <td><span class="tag tag-verde">✅ Pasan a SAS</span></td>
+      </tr>
+      <tr>
+        <td>Cuentas por Cobrar</td>
+        <td style="text-align:right">$1.855.547.000</td>
+        <td><span class="tag tag-rojo">ALTO</span></td>
+        <td><span class="tag tag-verde">✅ Pasan a SAS</span></td>
+      </tr>
+      <tr>
+        <td>Efectivo y Cuentas</td>
+        <td style="text-align:right">$93.990.000</td>
+        <td><span class="tag tag-rojo">ALTO</span></td>
+        <td><span class="tag tag-verde">✅ Cuentas SAS</span></td>
+      </tr>
+      <tr>
+        <td>Propiedad, Planta y Equipo</td>
+        <td style="text-align:right">$72.574.210</td>
+        <td><span class="tag tag-rojo">ALTO</span></td>
+        <td><span class="tag tag-verde">✅ Pasan a SAS</span></td>
+      </tr>
+      <tr>
+        <td>Otros Activos</td>
+        <td style="text-align:right">$166.585.000</td>
+        <td><span class="tag tag-amarillo">MEDIO</span></td>
+        <td><span class="tag tag-azul">🔄 Evaluar</span></td>
+      </tr>
+    </table>
+  </div>
+
+</div>
+
+<!-- ===========================
+     PÁGINA 4: PN vs SAS
+     =========================== -->
+<div id="page-comparativo" class="page">
+
+  <p class="section-title">⚖️ Persona Natural vs Sociedad por Acciones Simplificada</p>
+
+  <div class="grid-2">
+    <div class="comp-col">
+      <div class="comp-header pn">👤 Persona Natural (Situación Actual)</div>
+      <div class="comp-body">
+        <div class="comp-row rojo-row"><div class="lbl">Responsabilidad</div><div class="val">ILIMITADA sobre patrimonio total</div></div>
+        <div class="comp-row"><div class="lbl">Ingresos brutos</div><div class="val">$9.539M declarados</div></div>
+        <div class="comp-row"><div class="lbl">Tarifa renta máxima</div><div class="val">39% (art. 241 ET)</div></div>
+        <div class="comp-row rojo-row"><div class="lbl">Tasa efectiva 2025</div><div class="val">25% ($88.2M / $352.5M)</div></div>
+        <div class="comp-row"><div class="lbl">Patrimonio bruto declarado</div><div class="val">$4.063M</div></div>
+        <div class="comp-row rojo-row"><div class="lbl">Bienes embargables</div><div class="val">TODOS (incl. vivienda)</div></div>
+        <div class="comp-row"><div class="lbl">Constitución</div><div class="val">No aplica</div></div>
+        <div class="comp-row"><div class="lbl">Contabilidad obligatoria</div><div class="val">Solo si supera umbrales</div></div>
+        <div class="comp-row rojo-row"><div class="lbl">Separación riesgo</div><div class="val">❌ No existe</div></div>
+        <div class="comp-row rojo-row"><div class="lbl">Protección sucesoral</div><div class="val">❌ Depende de herencia</div></div>
+        <div class="comp-row"><div class="lbl">Impuesto dividendos</div><div class="val">No aplica (es PN)</div></div>
+        <div class="comp-row rojo-row"><div class="lbl">Continuidad empresa</div><div class="val">❌ Cesa con fallecimiento/quiebra</div></div>
+      </div>
+    </div>
+    <div class="comp-col">
+      <div class="comp-header sas">🏢 SAS (Estructura Propuesta)</div>
+      <div class="comp-body">
+        <div class="comp-row verde-row"><div class="lbl">Responsabilidad</div><div class="val">LIMITADA al monto de aportes</div></div>
+        <div class="comp-row"><div class="lbl">Ingresos brutos</div><div class="val">Mismos (en la SAS)</div></div>
+        <div class="comp-row"><div class="lbl">Tarifa impuesto sociedades</div><div class="val">35% (art. 240 ET)</div></div>
+        <div class="comp-row verde-row"><div class="lbl">Carga real (con reinversión)</div><div class="val">35% diferido en utilidades</div></div>
+        <div class="comp-row"><div class="lbl">Patrimonio personal</div><div class="val">Solo activos NO aportados</div></div>
+        <div class="comp-row verde-row"><div class="lbl">Bienes embargables</div><div class="val">Solo activos de la SAS</div></div>
+        <div class="comp-row"><div class="lbl">Constitución</div><div class="val">Documento privado + Registro CC</div></div>
+        <div class="comp-row"><div class="lbl">Contabilidad obligatoria</div><div class="val">Sí (NIIF Pymes recomendada)</div></div>
+        <div class="comp-row verde-row"><div class="lbl">Separación riesgo</div><div class="val">✅ Completa (Ley 1258/2008)</div></div>
+        <div class="comp-row verde-row"><div class="lbl">Protección sucesoral</div><div class="val">✅ Acciones se heredan</div></div>
+        <div class="comp-row"><div class="lbl">Impuesto dividendos</div><div class="val">15% 1ª subcédula; 35% 2ª</div></div>
+        <div class="comp-row verde-row"><div class="lbl">Continuidad empresa</div><div class="val">✅ Independiente de socios</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:24px">
+    <div class="card-title"><span class="icon">🔍</span>Tipos de Sociedad en Colombia: ¿Cuál elegir?</div>
+
+    <div class="pill-tabs">
+      <div class="pill-tab active" onclick="showPill(this, 'tab-sas')">SAS ⭐ Recomendada</div>
+      <div class="pill-tab" onclick="showPill(this, 'tab-ltda')">Ltda.</div>
+      <div class="pill-tab" onclick="showPill(this, 'tab-sa')">S.A.</div>
+      <div class="pill-tab" onclick="showPill(this, 'tab-individual')">EU</div>
+    </div>
+
+    <div id="tab-sas" class="pill-content active">
+      <div class="riesgo-bajo">
+        <div class="riesgo-titulo">✅ SAS – Sociedad por Acciones Simplificada (Ley 1258 de 2008)</div>
+        <div class="riesgo-desc">
+          <strong>Por qué es la mejor opción para Alejandro:</strong><br>
+          • Constitución por documento privado (no requiere escritura pública si no aporta inmuebles)<br>
+          • Un solo socio es suficiente (unipersonal o pluripersonal)<br>
+          • Responsabilidad limitada al capital aportado<br>
+          • Máxima flexibilidad estatutaria (acciones con voto múltiple, preferencias, etc.)<br>
+          • No requiere Junta Directiva obligatoria<br>
+          • Puede distribuir dividendos cuando decida el accionista<br>
+          • Tarifa: 35% sobre renta líquida de la sociedad<br>
+          • <strong>Costo aproximado constitución: $500.000 – $1.500.000 (derechos CC)</strong>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-ltda" class="pill-content">
+      <div class="riesgo-medio">
+        <div class="riesgo-titulo">🟡 Sociedad de Responsabilidad Limitada (Ltda.)</div>
+        <div class="riesgo-desc">
+          • Requiere mínimo 2 socios y máximo 25<br>
+          • Constitución por escritura pública<br>
+          • Responsabilidad limitada al capital aportado<br>
+          • Menor flexibilidad que SAS<br>
+          • Requiere Junta de Socios para decisiones importantes<br>
+          • Misma tarifa tributaria (35%)<br>
+          • <strong>No recomendada para este caso: mayor costo y rigidez</strong>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-sa" class="pill-content">
+      <div class="riesgo-alto">
+        <div class="riesgo-titulo">🔴 Sociedad Anónima (S.A.)</div>
+        <div class="riesgo-desc">
+          • Mínimo 5 accionistas<br>
+          • Escritura pública obligatoria<br>
+          • Junta Directiva y Revisoría Fiscal obligatorias<br>
+          • Adecuada para grandes empresas o con inversionistas institucionales<br>
+          • Muy costosa y rígida para este tamaño de empresa<br>
+          • <strong>No recomendada: exceso de requisitos para el caso</strong>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-individual" class="pill-content">
+      <div class="riesgo-medio">
+        <div class="riesgo-titulo">🟡 Empresa Unipersonal (EU) – Ley 222/1995</div>
+        <div class="riesgo-desc">
+          • Un solo fundador<br>
+          • Escritura pública requerida<br>
+          • Responsabilidad limitada<br>
+          • Figura prácticamente reemplazada por la SAS<br>
+          • Menor flexibilidad estatutaria<br>
+          • <strong>No recomendada: la SAS unipersonal es superior en todos los aspectos</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===========================
+     PÁGINA 5: ANÁLISIS FISCAL
+     =========================== -->
+<div id="page-fiscal" class="page">
+
+  <p class="section-title">🧮 Análisis Fiscal Comparado</p>
+
+  <div class="alerta alerta-info">
+    <div class="alerta-icon">ℹ️</div>
+    <div>El análisis fiscal debe considerar <strong>dos escenarios</strong>: (A) Retención total de utilidades para reinversión, y (B) Distribución de dividendos al accionista. La carga depende de la estrategia de retiro de utilidades.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📊</span>Escenario A: SAS con Reinversión de Utilidades</div>
+    <table>
+      <tr><th>Concepto</th><th style="text-align:right">Persona Natural</th><th style="text-align:right">SAS (Reinvierte)</th><th>Diferencia</th></tr>
+      <tr>
+        <td>Renta líquida gravable</td>
+        <td style="text-align:right">$352.499.000</td>
+        <td style="text-align:right">$352.499.000</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Impuesto de renta (tarifa)</td>
+        <td style="text-align:right">$88.188.000 (25% ef.)</td>
+        <td style="text-align:right">$123.375.000 (35%)</td>
+        <td><span class="tag tag-rojo">+$35.187.000</span></td>
+      </tr>
+      <tr>
+        <td>Dividendos distribuidos</td>
+        <td style="text-align:right">N/A</td>
+        <td style="text-align:right">$0 (reinvierte)</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Impuesto dividendos</td>
+        <td style="text-align:right">N/A</td>
+        <td style="text-align:right">$0</td>
+        <td>—</td>
+      </tr>
+      <tr style="background:#f0f9ff">
+        <td><strong>Carga total</strong></td>
+        <td style="text-align:right"><strong>$88.188.000</strong></td>
+        <td style="text-align:right"><strong>$123.375.000</strong></td>
+        <td><span class="tag tag-rojo">SAS paga más (reinvierte)</span></td>
+      </tr>
+      <tr style="background:#f0fdf4">
+        <td><strong>Utilidades acumuladas (SAS)</strong></td>
+        <td style="text-align:right">—</td>
+        <td style="text-align:right"><strong>$229.124.000</strong></td>
+        <td><span class="tag tag-verde">Reinversión empresa</span></td>
+      </tr>
+    </table>
+    <div class="nota">✅ En este escenario la SAS paga más impuesto hoy, pero las utilidades se quedan en la empresa para crecer. A largo plazo, esto puede ser ventajoso si la empresa se valoriza.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">💰</span>Escenario B: SAS con Distribución Total de Dividendos</div>
+    <table>
+      <tr><th>Concepto</th><th style="text-align:right">Persona Natural</th><th style="text-align:right">SAS + Dividendos</th><th>Diferencia</th></tr>
+      <tr>
+        <td>Renta líquida gravable</td>
+        <td style="text-align:right">$352.499.000</td>
+        <td style="text-align:right">$352.499.000</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Impuesto renta sociedad (35%)</td>
+        <td style="text-align:right">$88.188.000</td>
+        <td style="text-align:right">$123.375.000</td>
+        <td><span class="tag tag-rojo">+$35.187.000</span></td>
+      </tr>
+      <tr>
+        <td>Utilidad disponible para dividendos</td>
+        <td style="text-align:right">N/A</td>
+        <td style="text-align:right">$229.124.000</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>Impuesto dividendos 1ª subcédula (15%)</td>
+        <td style="text-align:right">N/A</td>
+        <td style="text-align:right">$34.369.000</td>
+        <td><span class="tag tag-rojo">Carga adicional</span></td>
+      </tr>
+      <tr style="background:#fff7ed">
+        <td><strong>Carga total combinada</strong></td>
+        <td style="text-align:right"><strong>$88.188.000</strong></td>
+        <td style="text-align:right"><strong>$157.744.000</strong></td>
+        <td><span class="tag tag-rojo">SAS paga $69.5M más</span></td>
+      </tr>
+      <tr>
+        <td>Neto en bolsillo</td>
+        <td style="text-align:right">$264.311.000</td>
+        <td style="text-align:right">$194.755.000</td>
+        <td><span class="tag tag-rojo">PN tiene más neto</span></td>
+      </tr>
+    </table>
+    <div class="nota">⚠️ Si Alejandro distribuye TODOS los dividendos, la carga fiscal aumenta. La ventaja de la SAS no es fiscal a corto plazo sino patrimonial y de protección.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🎯</span>Estrategia Fiscal Óptima con SAS</div>
+    <div class="grid-2">
+      <div>
+        <div class="paso">
+          <div class="paso-num">1</div>
+          <div class="paso-contenido">
+            <h4>Retener utilidades estratégicamente</h4>
+            <p>No distribuir el 100% de dividendos cada año. Reinvertir en inventario, activos y capital de trabajo para diferir el impuesto de dividendos.</p>
+          </div>
+        </div>
+        <div class="paso">
+          <div class="paso-num">2</div>
+          <div class="paso-contenido">
+            <h4>Optimizar deducciones corporativas</h4>
+            <p>La SAS puede deducir gastos administrativos, salarios de directivos (incluyendo honorarios al propio dueño), arrendamientos, depreciaciones y demás gastos necesarios.</p>
+          </div>
+        </div>
+        <div class="paso">
+          <div class="paso-num">3</div>
+          <div class="paso-contenido">
+            <h4>Vinculación laboral del accionista</h4>
+            <p>Alejandro puede ser empleado de su propia SAS, recibir salario deducible para la empresa y aplicar beneficios de la cédula de rentas de trabajo (tarifas progresivas más bajas).</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="paso">
+          <div class="paso-num">4</div>
+          <div class="paso-contenido">
+            <h4>Gestión del IVA y retenciones</h4>
+            <p>La SAS opera como responsable de IVA de manera separada, permitiendo un mejor control y gestión del IVA descontable sobre compras de inventario.</p>
+          </div>
+        </div>
+        <div class="paso">
+          <div class="paso-num">5</div>
+          <div class="paso-contenido">
+            <h4>Planeación de dividendos</h4>
+            <p>Distribuir dividendos de utilidades gravadas ($123M en impuesto pagado) que tributan al 15%, y diferir o evitar dividendos de utilidades no gravadas (2ª subcédula, tarifa 35%).</p>
+          </div>
+        </div>
+        <div class="paso">
+          <div class="paso-num">6</div>
+          <div class="paso-contenido">
+            <h4>Beneficio tributario crecimiento</h4>
+            <p>Si la SAS crece y genera más utilidades, la tarifa marginal del 39% en PN puede evitarse manteniéndolas en la sociedad al 35%.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alerta alerta-warn">
+    <div class="alerta-icon">⚠️</div>
+    <div><strong>Punto de equilibrio fiscal:</strong> La SAS conviene fiscalmente cuando las utilidades superan ~$800M anuales (donde la tarifa marginal PN 39% supera la tarifa SAS 35%). Con $352M de renta líquida, la ventaja actual es principalmente patrimonial, no fiscal. Sin embargo, si el negocio crece (lo que las cifras sugieren), la ventaja fiscal se invertirá pronto.</div>
+  </div>
+
+</div>
+
+<!-- ===========================
+     PÁGINA 6: CONSTITUCIÓN SAS
+     =========================== -->
+<div id="page-constitucion" class="page">
+
+  <p class="section-title">🏛️ Proceso de Constitución de la SAS</p>
+
+  <div class="grid-2" style="margin-bottom:24px">
+    <div class="kpi-card verde">
+      <div class="kpi-label">Tiempo estimado constitución</div>
+      <div class="kpi-value">3 – 5 días hábiles</div>
+      <div class="kpi-sub">Si no hay aportes en inmuebles</div>
+    </div>
+    <div class="kpi-card amarillo">
+      <div class="kpi-label">Costo aproximado total</div>
+      <div class="kpi-value">$2M – $5M</div>
+      <div class="kpi-sub">Incluye CC, abogado y gastos bancarios</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📋</span>Pasos para Constituir la SAS</div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-mes">Semana 1</div>
+        <div class="tl-titulo">1. Redactar Documento de Constitución</div>
+        <div class="tl-desc">
+          El documento privado debe contener (art. 5 Ley 1258/2008):<br>
+          • Nombre, documento de identidad y domicilio del accionista<br>
+          • Razón social seguida de "SAS" (ej. <em>Repuestos Forero SAS</em>)<br>
+          • Domicilio principal y sucursales<br>
+          • Capital autorizado, suscrito y pagado<br>
+          • Forma de administración y facultades del representante legal<br>
+          • Duración (puede ser indefinida)<br>
+          El documento requiere reconocimiento notarial o firma digital con firma electrónica.
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-mes">Semana 1</div>
+        <div class="tl-titulo">2. Preinscripción y Registro en Cámara de Comercio</div>
+        <div class="tl-desc">
+          • Verificar disponibilidad del nombre (www.ccb.org.co)<br>
+          • Presentar documento de constitución + formulario RUES<br>
+          • Pagar derechos de registro (aproximadamente 0.7% del capital)<br>
+          • Obtener matrícula mercantil<br>
+          <strong>Costo aprox: $500.000 – $2.000.000 según capital aportado</strong>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-mes">Semana 1-2</div>
+        <div class="tl-titulo">3. Inscripción en el RUT (DIAN)</div>
+        <div class="tl-desc">
+          • Actualizar/crear RUT como persona jurídica con el NIT de la SAS<br>
+          • Seleccionar actividad económica CIIU 4530<br>
+          • Declarar responsabilidades: IVA, Retenciones, Renta (régimen ordinario)<br>
+          • Definir si es Gran Contribuyente, Autorretenedor, o Responsable IVA bimestral/cuatrimestral<br>
+          <strong>Gratuito en portal DIAN</strong>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-mes">Semana 2</div>
+        <div class="tl-titulo">4. Apertura Cuenta Bancaria Empresarial</div>
+        <div class="tl-desc">
+          • Abrir cuenta corriente a nombre de la SAS<br>
+          • Documentos requeridos: matrícula mercantil, RUT, cédula representante legal<br>
+          • Separar desde el primer día las finanzas personales de las empresariales<br>
+          <strong>Bancos recomendados para Pymes: Bancolombia, Davivienda, Banco de Bogotá</strong>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-mes">Semana 2-3</div>
+        <div class="tl-titulo">5. Transferir Activos y Operación</div>
+        <div class="tl-desc">
+          • Inventarios: vender o aportar a la SAS (con factura o escritura de aporte)<br>
+          • Vehículos comerciales: traspasar a nombre de la SAS<br>
+          • Contratos con proveedores: novación o cesión a la SAS<br>
+          • Contratos laborales: liquidar y recontratar con la SAS<br>
+          <strong>⚠️ La transferencia de inventarios genera IVA y posibles impuestos. Consultar con contador.</strong>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-mes">Semana 3-4</div>
+        <div class="tl-titulo">6. Registro ICA y Otras Obligaciones Municipales</div>
+        <div class="tl-desc">
+          • Inscribir en el Industria y Comercio del municipio (si aplica)<br>
+          • Verificar si requiere uso de suelos, bomberos, conceptos sanitarios<br>
+          • Actualizar firma de facturación electrónica con el NIT de la SAS<br>
+          <strong>Costo variable según municipio</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📄</span>Contenido Mínimo Estatutos SAS</div>
+    <div class="grid-2">
+      <div>
+        <div class="riesgo-bajo" style="margin-bottom:10px">
+          <div class="riesgo-titulo">Capital Social Recomendado</div>
+          <div class="riesgo-desc">Mínimo $1 peso. Para el caso de Alejandro, recomendamos capitalizar con los activos del negocio: inventarios (~$1.747M) + PP&E (~$72M) = Capital ~$1.800M. Esto fortalece el balance de la SAS para obtener créditos.</div>
+        </div>
+        <div class="riesgo-bajo" style="margin-bottom:10px">
+          <div class="riesgo-titulo">Acciones</div>
+          <div class="riesgo-desc">Emitir 1.000.000 acciones ordinarias a $1.800 c/u (Capital $1.800M). Alejandro como único accionista inicial. Permite entrada futura de socios o inversionistas.</div>
+        </div>
+      </div>
+      <div>
+        <div class="riesgo-bajo" style="margin-bottom:10px">
+          <div class="riesgo-titulo">Representación Legal</div>
+          <div class="riesgo-desc">Alejandro como Gerente General con amplias facultades. Sin Junta Directiva (optativa en SAS). Designar un suplente para continuidad operativa.</div>
+        </div>
+        <div class="riesgo-bajo" style="margin-bottom:10px">
+          <div class="riesgo-titulo">Distribución de Dividendos</div>
+          <div class="riesgo-desc">Estatutos deben definir: % mínimo de reserva legal (10% hasta el 50% del capital), política de dividendos flexible, y proceso para decretar dividendos extraordinarios.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alerta alerta-info">
+    <div class="alerta-icon">💡</div>
+    <div><strong>Nombre sugerido para la SAS:</strong> "Repuestos Forero SAS", "AF Repuestos y Accesorios SAS" o "Comercializadora Forero SAS". Verificar disponibilidad en el RUES antes de proceder.</div>
+  </div>
+
+</div>
+
+<!-- ===========================
+     PÁGINA 7: HOJA DE RUTA
+     =========================== -->
+<div id="page-hoja-ruta" class="page">
+
+  <p class="section-title">🗺️ Hoja de Ruta de Implementación</p>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📅</span>Plan de Implementación en 90 Días</div>
+    <table>
+      <tr>
+        <th>Fase</th>
+        <th>Período</th>
+        <th>Actividades</th>
+        <th>Responsable</th>
+        <th>Estado</th>
+      </tr>
+      <tr>
+        <td><strong>Fase 1: Decisión y Diseño</strong></td>
+        <td>Semanas 1-2</td>
+        <td>Definir nombre, capital, estructura societaria, estatutos y política de distribución de dividendos</td>
+        <td>Abogado + Contador</td>
+        <td><span class="tag tag-azul">Pendiente</span></td>
+      </tr>
+      <tr>
+        <td><strong>Fase 2: Constitución Legal</strong></td>
+        <td>Semanas 3-4</td>
+        <td>Redactar y firmar documento privado, registrar en Cámara de Comercio, obtener matrícula y NIT</td>
+        <td>Abogado</td>
+        <td><span class="tag tag-azul">Pendiente</span></td>
+      </tr>
+      <tr>
+        <td><strong>Fase 3: Habilitación Fiscal</strong></td>
+        <td>Semanas 4-5</td>
+        <td>RUT persona jurídica, resolución facturación electrónica, inscripción ICA, libros contables</td>
+        <td>Contador</td>
+        <td><span class="tag tag-azul">Pendiente</span></td>
+      </tr>
+      <tr>
+        <td><strong>Fase 4: Bancaria y Operativa</strong></td>
+        <td>Semanas 5-6</td>
+        <td>Abrir cuenta bancaria SAS, migrar pagos recurrentes, notificar principales proveedores</td>
+        <td>Gerente (Alejandro)</td>
+        <td><span class="tag tag-azul">Pendiente</span></td>
+      </tr>
+      <tr>
+        <td><strong>Fase 5: Transferencia Activos</strong></td>
+        <td>Semanas 6-10</td>
+        <td>Traspasar inventarios, vehículos, contratos y cartera a la SAS. Liquidar empleados PN y recontratar en SAS</td>
+        <td>Abogado + Contador</td>
+        <td><span class="tag tag-azul">Pendiente</span></td>
+      </tr>
+      <tr>
+        <td><strong>Fase 6: Cierre y Auditoría</strong></td>
+        <td>Semanas 10-13</td>
+        <td>Inventario final PN, estados financieros de apertura SAS, cierre de declaraciones pendientes PN</td>
+        <td>Contador</td>
+        <td><span class="tag tag-azul">Pendiente</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">⚠️</span>Puntos Críticos a Gestionar</div>
+    <div class="grid-2">
+      <div>
+        <div class="riesgo-alto">
+          <div class="riesgo-titulo">Continuidad de Garantías con Proveedores</div>
+          <div class="riesgo-desc">Los proveedores actuales tienen garantías otorgadas por Alejandro como PN. Al cambiar a SAS, deben novarse las obligaciones. Algunos proveedores pueden solicitar nuevas garantías a la SAS o avales personales de Alejandro (lo que limita parcialmente la protección). <strong>Negociar desde el inicio.</strong></div>
+        </div>
+        <div class="riesgo-medio" style="margin-top:10px">
+          <div class="riesgo-titulo">IVA en Transferencia de Inventarios</div>
+          <div class="riesgo-desc">Si los inventarios se transfieren mediante venta (factura) de la PN a la SAS, se genera IVA del 19% sobre el valor. Alternativa: aportarlos como capital en especie (sin IVA pero con acta de valoración). Consultar con el contador la opción más eficiente.</div>
+        </div>
+      </div>
+      <div>
+        <div class="riesgo-medio">
+          <div class="riesgo-titulo">Contratos Laborales Existentes</div>
+          <div class="riesgo-desc">Los contratos actuales son con Alejandro PN. Para trasladarlos a la SAS se requiere acuerdo con cada empleado. Alternativa: terminación por mutuo acuerdo + vinculación nueva con SAS (con liquidación de prestaciones). Esto tiene un costo pero es necesario para la separación total.</div>
+        </div>
+        <div class="riesgo-bajo" style="margin-top:10px">
+          <div class="riesgo-titulo">Declaración PN Año de Transición</div>
+          <div class="riesgo-desc">El año en que se constituya la SAS, Alejandro seguirá declarando como PN los ingresos hasta la fecha de constitución. La SAS declarará desde la fecha de inscripción. Coordinación contable es clave para evitar duplicidades.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">💰</span>Costos Estimados del Proceso</div>
+    <table>
+      <tr><th>Concepto</th><th style="text-align:right">Valor Estimado</th><th>Observación</th></tr>
+      <tr><td>Honorarios abogado (constitución + estatutos)</td><td style="text-align:right">$1.500.000 – $3.000.000</td><td>Según complejidad</td></tr>
+      <tr><td>Derechos Cámara de Comercio</td><td style="text-align:right">$500.000 – $2.000.000</td><td>Aprox. 0.7% del capital</td></tr>
+      <tr><td>Reconocimiento firmas (Notaria)</td><td style="text-align:right">$50.000 – $150.000</td><td>Si no usa firma digital</td></tr>
+      <tr><td>Certificados y copias</td><td style="text-align:right">$50.000 – $100.000</td><td></td></tr>
+      <tr><td>Habilitación facturación electrónica</td><td style="text-align:right">$200.000 – $500.000</td><td>Proveedor tecnológico</td></tr>
+      <tr><td>Honorarios contador (apertura libros)</td><td style="text-align:right">$500.000 – $1.500.000</td><td></td></tr>
+      <tr><td>Costos laborales (liquidaciones)</td><td style="text-align:right">Variable</td><td>Según empleados actuales</td></tr>
+      <tr style="background:#f0fdf4"><td><strong>Total estimado (sin laborales)</strong></td><td style="text-align:right"><strong>$2.800.000 – $7.250.000</strong></td><td><span class="tag tag-verde">Muy razonable</span></td></tr>
+    </table>
+  </div>
+
+</div>
+
+<!-- ===========================
+     PÁGINA 8: RECOMENDACIONES
+     =========================== -->
+<div id="page-recomendaciones" class="page">
+
+  <p class="section-title">✅ Recomendaciones Finales</p>
+
+  <div class="alerta alerta-ok">
+    <div class="alerta-icon">✅</div>
+    <div><strong>Conclusión General:</strong> La constitución de una SAS es la decisión correcta para Alejandro. Con un negocio de $9.500M en ingresos y un patrimonio bruto de $4.063M expuesto, el costo de la protección ($3M–$7M) es mínimo frente al beneficio de blindar su patrimonio personal.</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="icon">🎯</span>Recomendaciones Inmediatas (0-30 días)</div>
+      <div class="paso">
+        <div class="paso-num">1</div>
+        <div class="paso-contenido">
+          <h4>Constituir la SAS</h4>
+          <p>Contratar abogado para redactar estatutos y documento de constitución. Nombre sugerido: <em>Forero Repuestos SAS</em> o similar. Capital inicial: activos del negocio.</p>
+        </div>
+      </div>
+      <div class="paso">
+        <div class="paso-num">2</div>
+        <div class="paso-contenido">
+          <h4>Separar cuentas bancarias</h4>
+          <p>Abrir cuenta bancaria a nombre de la SAS desde el primer día. Ningún ingreso del negocio debe llegar a cuentas personales de Alejandro después de la constitución.</p>
+        </div>
+      </div>
+      <div class="paso">
+        <div class="paso-num">3</div>
+        <div class="paso-contenido">
+          <h4>Notificar proveedores clave</h4>
+          <p>Informar a los principales proveedores el cambio de razón social. Iniciar novación de contratos y renegociación de garantías.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">📌</span>Recomendaciones de Mediano Plazo (30-90 días)</div>
+      <div class="paso">
+        <div class="paso-num">4</div>
+        <div class="paso-contenido">
+          <h4>Transferir activos del negocio</h4>
+          <p>Trasladar inventarios, vehículos y equipos a nombre de la SAS, con la asesoría fiscal para optimizar el manejo del IVA en la transferencia.</p>
+        </div>
+      </div>
+      <div class="paso">
+        <div class="paso-num">5</div>
+        <div class="paso-contenido">
+          <h4>Implementar contabilidad NIIF Pymes</h4>
+          <p>La SAS debe llevar contabilidad desde el primer día. Contratar software contable y definir políticas de reconocimiento de inventarios (PEPS o promedio ponderado).</p>
+        </div>
+      </div>
+      <div class="paso">
+        <div class="paso-num">6</div>
+        <div class="paso-contenido">
+          <h4>Revisar seguros</h4>
+          <p>Actualizar pólizas de seguro (activos, responsabilidad civil, manejo) a nombre de la SAS. Considerar póliza de responsabilidad civil del representante legal.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🛡️</span>Estrategia Adicional de Protección Patrimonial</div>
+    <div class="grid-2">
+      <div>
+        <div class="riesgo-bajo">
+          <div class="riesgo-titulo">🏠 Protección de la Vivienda Habitual</div>
+          <div class="riesgo-desc">
+            La casa de habitación ($128M) tiene protección limitada en el CGP. Para reforzarla:<br>
+            • <strong>Afectación a vivienda familiar (Ley 258/1996)</strong>: si Alejandro es casado o tiene unión marital, puede declarar el inmueble como vivienda familiar, requiriendo consentimiento del cónyuge para cualquier acto dispositivo o gravamen.<br>
+            • <strong>Fideicomiso de Administración (Decreto 663/1993)</strong>: transferir el inmueble a un patrimonio autónomo administrado por fiduciaria.
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="riesgo-bajo">
+          <div class="riesgo-titulo">📋 Medidas Complementarias</div>
+          <div class="riesgo-desc">
+            • <strong>Capitulaciones matrimoniales o acuerdo de separación de bienes</strong>: si está casado, separar formalmente los bienes personales de los empresariales.<br>
+            • <strong>Testamento notarial</strong>: planificación sucesoral para que las acciones de la SAS pasen a herederos sin interrumpir la operación.<br>
+            • <strong>Póliza de vida empresarial</strong>: proteger a la SAS en caso de fallecimiento del socio.<br>
+            • <strong>Holding familiar</strong>: a futuro, crear una sociedad holding para administrar las acciones de la SAS operativa.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📊</span>Resumen de Beneficios de la Estructuración</div>
+    <table>
+      <tr>
+        <th>Beneficio</th>
+        <th>Sin SAS (PN)</th>
+        <th>Con SAS</th>
+        <th>Impacto</th>
+      </tr>
+      <tr>
+        <td>Protección patrimonial personal</td>
+        <td><span class="tag tag-rojo">❌ Nula</span></td>
+        <td><span class="tag tag-verde">✅ Alta</span></td>
+        <td>$4.063M protegidos</td>
+      </tr>
+      <tr>
+        <td>Limitación de responsabilidad</td>
+        <td><span class="tag tag-rojo">❌ Ilimitada</span></td>
+        <td><span class="tag tag-verde">✅ Al capital</span></td>
+        <td>Riesgo acotado</td>
+      </tr>
+      <tr>
+        <td>Carga fiscal actual</td>
+        <td><span class="tag tag-verde">✅ 25%</span></td>
+        <td><span class="tag tag-amarillo">🟡 35%+ dividendos</span></td>
+        <td>Mayor con dividendos</td>
+      </tr>
+      <tr>
+        <td>Deducibilidad de gastos</td>
+        <td><span class="tag tag-amarillo">🟡 Limitada</span></td>
+        <td><span class="tag tag-verde">✅ Amplia</span></td>
+        <td>Mayor eficiencia</td>
+      </tr>
+      <tr>
+        <td>Credibilidad ante bancos</td>
+        <td><span class="tag tag-amarillo">🟡 Media</span></td>
+        <td><span class="tag tag-verde">✅ Alta</span></td>
+        <td>Mejores créditos</td>
+      </tr>
+      <tr>
+        <td>Continuidad empresarial</td>
+        <td><span class="tag tag-rojo">❌ En riesgo</span></td>
+        <td><span class="tag tag-verde">✅ Garantizada</span></td>
+        <td>Valor del negocio</td>
+      </tr>
+      <tr>
+        <td>Planeación sucesoral</td>
+        <td><span class="tag tag-amarillo">🟡 Compleja</span></td>
+        <td><span class="tag tag-verde">✅ Simplificada</span></td>
+        <td>Transferencia acciones</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="alerta alerta-warn">
+    <div class="alerta-icon">⚖️</div>
+    <div><strong>Nota Legal:</strong> Este análisis es de carácter informativo y educativo. La implementación de esta estrategia requiere asesoría de un abogado especializado en derecho societario y un contador público con experiencia en tributación colombiana. Los montos y tarifas corresponden a la normatividad vigente a 2025 (Estatuto Tributario, Ley 1258/2008, Decreto 624/1989 y normas concordantes).</div>
+  </div>
+
+</div>
+
+<!-- ===========================
+     PÁGINA 9: REQUISITOS LEGALES
+     =========================== -->
+<div id="page-requisitos" class="page">
+
+  <p class="section-title">⚖️ Requisitos Legales – SAS con 10 Empleados</p>
+
+  <div class="alerta alerta-info">
+    <div class="alerta-icon">ℹ️</div>
+    <div><strong>Contexto:</strong> Alejandro ya tiene 10 empleados afiliados a seguridad social como persona natural. Al constituir la SAS, estas obligaciones se trasladan a la nueva sociedad. La buena noticia: la base ya está construida. Se trata de actualizar el empleador, no comenzar desde cero.</div>
+  </div>
+
+  <!-- KPIs resumen -->
+  <div class="grid-4" style="margin-bottom:24px">
+    <div class="kpi-card rojo">
+      <div class="kpi-label">Carga parafiscal estimada</div>
+      <div class="kpi-value">~9%</div>
+      <div class="kpi-sub">Sobre nómina mensual total</div>
+    </div>
+    <div class="kpi-card amarillo">
+      <div class="kpi-label">Carga seguridad social</div>
+      <div class="kpi-value">~30.5%</div>
+      <div class="kpi-sub">Empleador + empleado combinado</div>
+    </div>
+    <div class="kpi-card verde">
+      <div class="kpi-label">Obligaciones tributarias</div>
+      <div class="kpi-value">Mensual</div>
+      <div class="kpi-sub">Retención en la fuente nómina</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">SGSST obligatorio</div>
+      <div class="kpi-value">Sí</div>
+      <div class="kpi-sub">Desde el 1er empleado (Decreto 1072)</div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 1: OBLIGACIONES LABORALES -->
+  <div class="card">
+    <div class="card-title"><span class="icon">👷</span>1. Obligaciones Laborales Básicas (CST)</div>
+    <table>
+      <tr>
+        <th>Obligación</th>
+        <th>Norma</th>
+        <th>Frecuencia</th>
+        <th>Observación para la SAS</th>
+        <th>Estado</th>
+      </tr>
+      <tr>
+        <td><strong>Contrato de trabajo escrito</strong></td>
+        <td>Art. 37-39 CST</td>
+        <td>Al contratar</td>
+        <td>Al trasladar empleados a la SAS, nuevos contratos o cláusula de novación del empleador</td>
+        <td><span class="tag tag-rojo">⚠️ Actualizar</span></td>
+      </tr>
+      <tr>
+        <td><strong>Reglamento Interno de Trabajo (RIT)</strong></td>
+        <td>Art. 104-125 CST</td>
+        <td>Único + actualizaciones</td>
+        <td>Obligatorio con más de 5 empleados. Debe registrarse en el Ministerio del Trabajo. Actualizar con el nombre de la SAS</td>
+        <td><span class="tag tag-rojo">⚠️ Obligatorio</span></td>
+      </tr>
+      <tr>
+        <td><strong>Reglamento de Higiene y Seguridad</strong></td>
+        <td>Res. 2400/1979</td>
+        <td>Único + revisiones</td>
+        <td>Fijar en lugar visible. Adaptado a la actividad de comercio de repuestos (manejo de lubricantes, metales)</td>
+        <td><span class="tag tag-amarillo">Verificar</span></td>
+      </tr>
+      <tr>
+        <td><strong>Escala salarial y pago oportuno</strong></td>
+        <td>Art. 132-143 CST</td>
+        <td>Quincenal o mensual</td>
+        <td>Pago máximo dentro del período. Nunca inferior al SMLMV ($1.423.500 en 2025)</td>
+        <td><span class="tag tag-verde">✅ Cumpliendo</span></td>
+      </tr>
+      <tr>
+        <td><strong>Prima de servicios</strong></td>
+        <td>Art. 306-308 CST</td>
+        <td>Jun 30 y Dic 20</td>
+        <td>15 días de salario cada semestre. No es factor prestacional para liquidar otras prestaciones</td>
+        <td><span class="tag tag-verde">✅ Cumpliendo</span></td>
+      </tr>
+      <tr>
+        <td><strong>Cesantías</strong></td>
+        <td>Art. 249-252 CST</td>
+        <td>Feb 14 (consignación)</td>
+        <td>Un mes de salario por año. Consignar al fondo elegido por el empleado antes del 14 de febrero</td>
+        <td><span class="tag tag-verde">✅ Cumpliendo</span></td>
+      </tr>
+      <tr>
+        <td><strong>Intereses sobre cesantías</strong></td>
+        <td>Ley 52/1975</td>
+        <td>Ene 31</td>
+        <td>12% anual sobre cesantías. Pagar directamente al empleado en enero</td>
+        <td><span class="tag tag-verde">✅ Cumpliendo</span></td>
+      </tr>
+      <tr>
+        <td><strong>Vacaciones</strong></td>
+        <td>Art. 186-192 CST</td>
+        <td>Anual</td>
+        <td>15 días hábiles por año. Pueden acumularse máximo 4 períodos con autorización MinTrabajo</td>
+        <td><span class="tag tag-verde">✅ Cumpliendo</span></td>
+      </tr>
+      <tr>
+        <td><strong>Dotación de calzado y vestido</strong></td>
+        <td>Art. 230-234 CST</td>
+        <td>Abr, Ago, Dic</td>
+        <td>Para empleados que ganen hasta 2 SMLMV. 3 veces al año (30 abr, 31 ago, 20 dic)</td>
+        <td><span class="tag tag-amarillo">Verificar</span></td>
+      </tr>
+      <tr>
+        <td><strong>Auxilio de transporte</strong></td>
+        <td>Ley 15/1959</td>
+        <td>Con cada pago de nómina</td>
+        <td>$200.000 mensuales (2025) para empleados que ganen hasta 2 SMLMV. Es factor para liquidar cesantías e intereses</td>
+        <td><span class="tag tag-verde">✅ Cumpliendo</span></td>
+      </tr>
+      <tr>
+        <td><strong>Liquidación al retiro</strong></td>
+        <td>Art. 64-66 CST</td>
+        <td>Al terminar contrato</td>
+        <td>Cesantías + intereses + vacaciones proporcionales + prima proporcional. Plazo: mismo día del retiro</td>
+        <td><span class="tag tag-azul">Al ocurrir</span></td>
+      </tr>
+    </table>
+    <div class="nota">* Al trasladar empleados de PN a SAS: respetar antigüedad acumulada. La sustitución patronal (art. 67 CST) obliga a la SAS a asumir los contratos en las mismas condiciones.</div>
+  </div>
+
+  <!-- BLOQUE 2: SEGURIDAD SOCIAL -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🏥</span>2. Seguridad Social y Parafiscales</div>
+
+    <div class="grid-2" style="margin-bottom:20px">
+      <div>
+        <div style="font-weight:700;color:var(--azul-oscuro);margin-bottom:12px;font-size:0.95rem">Aportes a Seguridad Social (sobre salario)</div>
+        <table>
+          <tr><th>Concepto</th><th>Empleador</th><th>Empleado</th><th>Total</th></tr>
+          <tr><td>Salud (EPS)</td><td>8.5%</td><td>4%</td><td style="font-weight:700">12.5%</td></tr>
+          <tr><td>Pensión (AFP)</td><td>12%</td><td>4%</td><td style="font-weight:700">16%</td></tr>
+          <tr><td>ARL (Riesgo Clase II – comercio)</td><td>1.044%</td><td>0%</td><td style="font-weight:700">1.044%</td></tr>
+          <tr style="background:#f0fdf4"><td><strong>Total aprox.</strong></td><td><strong>21.54%</strong></td><td><strong>8%</strong></td><td><strong>~29.5%</strong></td></tr>
+        </table>
+        <div class="nota" style="margin-top:8px">* La ARL varía según nivel de riesgo. Comercio de repuestos: Clase II (1.044%) o Clase III si hay bodega/manipulación de maquinaria. Verificar con la ARL asignada.</div>
+      </div>
+      <div>
+        <div style="font-weight:700;color:var(--azul-oscuro);margin-bottom:12px;font-size:0.95rem">Aportes Parafiscales (solo empleador)</div>
+        <table>
+          <tr><th>Concepto</th><th>Tarifa</th><th>Entidad</th></tr>
+          <tr><td>SENA</td><td>2%</td><td>SENA</td></tr>
+          <tr><td>ICBF</td><td>3%</td><td>ICBF</td></tr>
+          <tr><td>Caja de Compensación Familiar</td><td>4%</td><td>Cafam, Colsubsidio, etc.</td></tr>
+          <tr style="background:#fff7ed"><td colspan="1"><strong>Total parafiscal</strong></td><td><strong>9%</strong></td><td>—</td></tr>
+        </table>
+        <div class="alerta alerta-warn" style="margin-top:10px;padding:10px 14px;font-size:0.8rem">
+          <div class="alerta-icon">⚠️</div>
+          <div><strong>Exoneración Ley 1607/2012:</strong> Las SAS con empleados que ganen más de 10 SMLMV NO están exoneradas. La exoneración de SENA e ICBF aplica solo sobre la porción del salario &lt; 10 SMLMV. Verificar la nómina concreta.</div>
+        </div>
+      </div>
+    </div>
+
+    <table>
+      <tr>
+        <th>Obligación</th>
+        <th>Norma</th>
+        <th>Plazo de pago</th>
+        <th>Plataforma</th>
+        <th>Sanción por mora</th>
+      </tr>
+      <tr>
+        <td><strong>Pago integrado PILA</strong> (salud + pensión + ARL)</td>
+        <td>Ley 100/1993, Decreto 1406/1999</td>
+        <td>Hasta el día 5 del mes siguiente (NIT 9)</td>
+        <td>Operadores PILA: SOI, Aportes en Línea, Mi Planilla</td>
+        <td>Interés de mora + posible sanción MinTrabajo</td>
+      </tr>
+      <tr>
+        <td><strong>Aportes parafiscales</strong></td>
+        <td>Ley 21/1982, Ley 89/1988</td>
+        <td>Mismo plazo PILA (unificado)</td>
+        <td>PILA (integrado)</td>
+        <td>Multas hasta 100 SMLMV</td>
+      </tr>
+      <tr>
+        <td><strong>Fondo de cesantías</strong></td>
+        <td>Ley 50/1990</td>
+        <td>14 de febrero</td>
+        <td>Portal del fondo (Porvenir, Protección, etc.)</td>
+        <td>Interés del doble (art. 99 Ley 50/1990)</td>
+      </tr>
+      <tr>
+        <td><strong>Afiliación caja compensación</strong></td>
+        <td>Ley 21/1982</td>
+        <td>Al ingresar el empleado</td>
+        <td>Directamente en la Caja</td>
+        <td>Multa + pago retroactivo</td>
+      </tr>
+      <tr>
+        <td><strong>Subsidio familiar</strong> (salarios &lt; 4 SMLMV con carga familiar)</td>
+        <td>Ley 21/1982</td>
+        <td>Mensual con nómina</td>
+        <td>Caja de compensación</td>
+        <td>—</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- BLOQUE 3: SGSST -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🦺</span>3. Sistema de Gestión de Seguridad y Salud en el Trabajo (SGSST)</div>
+
+    <div class="alerta alerta-danger" style="margin-bottom:16px">
+      <div class="alerta-icon">🔴</div>
+      <div><strong>Obligatorio desde el 1er empleado.</strong> El Decreto 1072 de 2015 (Libro 2, Parte 2, Título 4, Capítulo 6) establece que TODAS las empresas sin importar tamaño deben implementar el SGSST. El incumplimiento genera multas de hasta 500 SMLMV y cierre del establecimiento.</div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <div style="font-weight:700;color:var(--azul-oscuro);margin-bottom:10px">Documentos Obligatorios SGSST</div>
+        <div class="riesgo-bajo" style="margin-bottom:8px">
+          <div class="riesgo-titulo">✅ Política de SST</div>
+          <div class="riesgo-desc">Documento firmado por el Representante Legal comprometiéndose con la seguridad. Publicar en lugar visible y en la intranet/cartelera.</div>
+        </div>
+        <div class="riesgo-bajo" style="margin-bottom:8px">
+          <div class="riesgo-titulo">✅ Evaluación inicial del SGSST</div>
+          <div class="riesgo-desc">Diagnóstico del estado actual de seguridad. Se actualiza anualmente.</div>
+        </div>
+        <div class="riesgo-bajo" style="margin-bottom:8px">
+          <div class="riesgo-titulo">✅ Plan Anual de Trabajo SST</div>
+          <div class="riesgo-desc">Con objetivos, metas, actividades, fechas y recursos. Firmado por gerente y responsable SST.</div>
+        </div>
+        <div class="riesgo-bajo" style="margin-bottom:8px">
+          <div class="riesgo-titulo">✅ Matriz de Identificación de Peligros (IPVR)</div>
+          <div class="riesgo-desc">Para comercio de repuestos: riesgo químico (lubricantes), mecánico (carga/descarga), ergonómico, locativo. Actualizar ante cambios en el proceso.</div>
+        </div>
+        <div class="riesgo-bajo">
+          <div class="riesgo-titulo">✅ Programa de capacitación SST</div>
+          <div class="riesgo-desc">Mínimo 50 horas anuales de capacitación en SST por empleado (Resolución 0312/2019).</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:700;color:var(--azul-oscuro);margin-bottom:10px">Obligaciones Adicionales (10 empleados)</div>
+        <table>
+          <tr><th>Requisito</th><th>Aplica con 10 emp.</th></tr>
+          <tr><td>Comité Paritario SST (COPASST)</td><td><span class="tag tag-verde">✅ Obligatorio</span></td></tr>
+          <tr><td>Comité de Convivencia Laboral</td><td><span class="tag tag-verde">✅ Obligatorio</span></td></tr>
+          <tr><td>Brigada de emergencias</td><td><span class="tag tag-verde">✅ Obligatorio</span></td></tr>
+          <tr><td>Exámenes médicos ocupacionales</td><td><span class="tag tag-verde">✅ Obligatorio</span></td></tr>
+          <tr><td>Plan de emergencias</td><td><span class="tag tag-verde">✅ Obligatorio</span></td></tr>
+          <tr><td>Revisor fiscal interno SST</td><td><span class="tag tag-amarillo">No aplica</span></td></tr>
+          <tr><td>Estándares mínimos Resolución 0312</td><td><span class="tag tag-verde">✅ 60 estándares</span></td></tr>
+          <tr><td>Autoevaluación anual (dic)</td><td><span class="tag tag-verde">✅ Obligatorio</span></td></tr>
+          <tr><td>Reporte accidentes FURAT (ARL + Min)</td><td><span class="tag tag-verde">✅ Al ocurrir</span></td></tr>
+        </table>
+        <div class="nota" style="margin-top:8px">COPASST: 1 representante empleador + 1 representante empleados. Período: 2 años. Reuniones: mensual.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 4: OBLIGACIONES TRIBUTARIAS -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🧾</span>4. Obligaciones Tributarias de la SAS</div>
+
+    <div class="pill-tabs">
+      <div class="pill-tab active" onclick="showPill(this,'tab-trib-nacionales')">Nacionales (DIAN)</div>
+      <div class="pill-tab" onclick="showPill(this,'tab-trib-municipales')">Municipales</div>
+      <div class="pill-tab" onclick="showPill(this,'tab-trib-nomina')">Nómina</div>
+    </div>
+
+    <div id="tab-trib-nacionales" class="pill-content active">
+      <table>
+        <tr><th>Impuesto / Obligación</th><th>Periodicidad</th><th>Vencimiento aprox.</th><th>Norma</th></tr>
+        <tr>
+          <td><strong>Impuesto de Renta</strong> – Declaración anual</td>
+          <td>Anual</td>
+          <td>Abril (grandes) / Mayo (demás)</td>
+          <td>Art. 240 ET – Tarifa 35%</td>
+        </tr>
+        <tr>
+          <td><strong>Anticipo de renta</strong></td>
+          <td>Con declaración anual</td>
+          <td>Con renta anual</td>
+          <td>Art. 807 ET – 75% del impuesto</td>
+        </tr>
+        <tr>
+          <td><strong>IVA</strong> – Régimen responsable</td>
+          <td>Bimestral (grandes) o cuatrimestral</td>
+          <td>Depende del NIT</td>
+          <td>Art. 600 ET – Tarifa general 19%</td>
+        </tr>
+        <tr>
+          <td><strong>Retención en la fuente</strong></td>
+          <td>Mensual</td>
+          <td>Hasta el 8 del mes siguiente</td>
+          <td>Art. 365-407 ET</td>
+        </tr>
+        <tr>
+          <td><strong>Autorretención renta CREE</strong></td>
+          <td>Mensual</td>
+          <td>Hasta el 8 del mes siguiente</td>
+          <td>Dec. 2201/2016 (si aplica)</td>
+        </tr>
+        <tr>
+          <td><strong>Información Exógena (medios magnéticos)</strong></td>
+          <td>Anual</td>
+          <td>Marzo – Abril (año siguiente)</td>
+          <td>Res. DIAN anual – aplica si supera umbrales</td>
+        </tr>
+        <tr>
+          <td><strong>Declaración de activos en el exterior</strong></td>
+          <td>Anual</td>
+          <td>Agosto</td>
+          <td>Art. 607 ET – Solo si tiene activos fuera</td>
+        </tr>
+        <tr>
+          <td><strong>Facturación electrónica</strong></td>
+          <td>Permanente (en cada venta)</td>
+          <td>En tiempo real</td>
+          <td>Dec. 358/2020 – Obligatoria para SAS</td>
+        </tr>
+      </table>
+    </div>
+
+    <div id="tab-trib-municipales" class="pill-content">
+      <table>
+        <tr><th>Impuesto</th><th>Periodicidad</th><th>Tarifa aprox.</th><th>Norma</th></tr>
+        <tr>
+          <td><strong>Impuesto de Industria y Comercio (ICA)</strong></td>
+          <td>Anual o bimestral según municipio</td>
+          <td>3 a 10 por mil sobre ingresos brutos</td>
+          <td>Ley 14/1983, estatutos tributarios municipales</td>
+        </tr>
+        <tr>
+          <td><strong>Sobretasa bomberos</strong></td>
+          <td>Con el ICA</td>
+          <td>Hasta 1.5% del ICA</td>
+          <td>Ley 1575/2012</td>
+        </tr>
+        <tr>
+          <td><strong>Avisos y tableros</strong></td>
+          <td>Anual (con ICA)</td>
+          <td>15% del ICA</td>
+          <td>Ley 97/1913</td>
+        </tr>
+        <tr>
+          <td><strong>Predial unificado</strong></td>
+          <td>Anual</td>
+          <td>Según avalúo catastral</td>
+          <td>Solo si la SAS es propietaria de inmuebles</td>
+        </tr>
+        <tr>
+          <td><strong>Retención ICA</strong></td>
+          <td>Mensual o según municipio</td>
+          <td>Variable (4–7 por mil)</td>
+          <td>Aplica si es agente retenedor designado</td>
+        </tr>
+      </table>
+      <div class="nota">⚠️ Para comercio de repuestos CIIU 4530, verificar la tarifa exacta de ICA en el municipio de operación. En Bogotá es 4.14 por mil sobre ingresos brutos netos.</div>
+    </div>
+
+    <div id="tab-trib-nomina" class="pill-content">
+      <table>
+        <tr><th>Obligación</th><th>Periodicidad</th><th>Descripción</th></tr>
+        <tr>
+          <td><strong>Retención en la fuente sobre salarios</strong></td>
+          <td>Mensual (con pago nómina)</td>
+          <td>Aplicar tabla de retención art. 383 ET sobre pagos laborales que superen 95 UVT mensuales</td>
+        </tr>
+        <tr>
+          <td><strong>Declarar y pagar retención</strong></td>
+          <td>Mensual</td>
+          <td>Formulario 350. Incluye retenciones sobre salarios, honorarios, compras, servicios</td>
+        </tr>
+        <tr>
+          <td><strong>Certificado de ingresos y retenciones (Formulario 220)</strong></td>
+          <td>Anual – antes de marzo 15</td>
+          <td>Emitir a cada empleado para que declare renta. Obligatorio aunque el empleado no esté obligado a declarar</td>
+        </tr>
+        <tr>
+          <td><strong>Nómina electrónica</strong></td>
+          <td>Mensual (con cada pago)</td>
+          <td>Resolución DIAN 000013/2021. Obligatoria para la SAS. Transmitir dentro del mes siguiente al pago</td>
+        </tr>
+        <tr>
+          <td><strong>Información exógena de pagos laborales</strong></td>
+          <td>Anual</td>
+          <td>Reportar pagos a empleados si superan umbrales de la resolución anual</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- BLOQUE 5: OBLIGACIONES FORMALES CÁMARA DE COMERCIO -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🏛️</span>5. Obligaciones ante Cámara de Comercio y Otras Entidades</div>
+    <div class="grid-2">
+      <div>
+        <table>
+          <tr><th>Obligación</th><th>Plazo</th><th>Costo aprox.</th></tr>
+          <tr>
+            <td><strong>Renovación matrícula mercantil</strong></td>
+            <td>Antes del 31 de marzo de cada año</td>
+            <td>Según activos (0.07%)</td>
+          </tr>
+          <tr>
+            <td><strong>Renovación matrícula establecimientos</strong></td>
+            <td>31 de marzo</td>
+            <td>$100.000 – $300.000</td>
+          </tr>
+          <tr>
+            <td><strong>Depósito estados financieros</strong></td>
+            <td>30 días después de aprobación (marzo/abril)</td>
+            <td>Sin costo</td>
+          </tr>
+          <tr>
+            <td><strong>Actualización datos RUE</strong></td>
+            <td>Dentro del mes siguiente al cambio</td>
+            <td>Sin costo</td>
+          </tr>
+          <tr>
+            <td><strong>Inscripción libros contables</strong></td>
+            <td>Al constituir y cuando se agoten</td>
+            <td>$20.000 – $40.000 c/u</td>
+          </tr>
+          <tr>
+            <td><strong>Registro de actas de asamblea</strong></td>
+            <td>Cuando la reforma sea inscribible</td>
+            <td>Según acto</td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <div class="riesgo-medio" style="margin-bottom:12px">
+          <div class="riesgo-titulo">⚠️ ¿Requiere Revisoría Fiscal?</div>
+          <div class="riesgo-desc">
+            La SAS requiere Revisoría Fiscal cuando cumpla los umbrales del art. 203 Código de Comercio y Ley 43/1990:<br><br>
+            • <strong>Activos brutos &gt; 5.000 SMLMV</strong> ($7.117M en 2025), O<br>
+            • <strong>Ingresos brutos &gt; 3.000 SMLMV</strong> ($4.270M en 2025)<br><br>
+            <strong>Conclusión:</strong> Con ingresos de $9.500M, Alejandro <strong>SÍ estará obligado</strong> a tener Revisoría Fiscal en la SAS desde el primer año. Debe contratar un Revisor Fiscal inscrito ante la Junta Central de Contadores.<br><br>
+            <strong>Costo estimado: $3M – $8M anuales</strong> según complejidad.
+          </div>
+        </div>
+        <div class="riesgo-bajo">
+          <div class="riesgo-titulo">✅ Libros Contables Obligatorios</div>
+          <div class="riesgo-desc">
+            • Libro Diario (registro de transacciones)<br>
+            • Libro Mayor y Balances<br>
+            • Libro de Inventarios y Balances<br>
+            • Libro de Actas (asamblea y junta si existe)<br>
+            • Libro de Accionistas (registro de acciones)<br>
+            Todos deben inscribirse en Cámara de Comercio.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 6: PERMISOS Y LICENCIAS -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📋</span>6. Permisos, Licencias y Registros Especiales</div>
+    <table>
+      <tr>
+        <th>Requisito</th>
+        <th>Entidad</th>
+        <th>¿Aplica al negocio?</th>
+        <th>Observación</th>
+      </tr>
+      <tr>
+        <td><strong>Uso de suelos</strong></td>
+        <td>Curaduría urbana / Planeación municipal</td>
+        <td><span class="tag tag-verde">✅ Sí</span></td>
+        <td>Verificar que el local tenga uso comercial permitido para comercio de repuestos</td>
+      </tr>
+      <tr>
+        <td><strong>Concepto sanitario</strong></td>
+        <td>Secretaría de Salud</td>
+        <td><span class="tag tag-amarillo">Verificar</span></td>
+        <td>Si maneja lubricantes, aceites o productos que puedan ser residuos peligrosos (RESPEL)</td>
+      </tr>
+      <tr>
+        <td><strong>Registro INVIMA</strong></td>
+        <td>INVIMA</td>
+        <td><span class="tag tag-azul">No aplica gral.</span></td>
+        <td>Solo si comercializa productos de aseo o higiene. Repuestos mecánicos: no aplica</td>
+      </tr>
+      <tr>
+        <td><strong>Gestión de residuos peligrosos (RESPEL)</strong></td>
+        <td>CAR / Autoridad ambiental</td>
+        <td><span class="tag tag-amarillo">⚠️ Posible</span></td>
+        <td>Si almacena o manipula aceites, lubricantes, baterías o filtros usados. Decreto 4741/2005</td>
+      </tr>
+      <tr>
+        <td><strong>Registro ante la DIAN como importador</strong></td>
+        <td>DIAN – Comercio exterior</td>
+        <td><span class="tag tag-amarillo">Verificar</span></td>
+        <td>Si importa repuestos directamente. Requiere RUT con responsabilidad de importador</td>
+      </tr>
+      <tr>
+        <td><strong>Concepto de Bomberos</strong></td>
+        <td>Cuerpo de Bomberos</td>
+        <td><span class="tag tag-verde">✅ Sí</span></td>
+        <td>Plan de emergencias y extintores vigentes. Renovación anual</td>
+      </tr>
+      <tr>
+        <td><strong>Registro RUNT / SIMIT</strong></td>
+        <td>Ministerio de Transporte</td>
+        <td><span class="tag tag-azul">No aplica</span></td>
+        <td>Solo si repara vehículos. Comercio puro: no aplica</td>
+      </tr>
+      <tr>
+        <td><strong>Protección de datos personales (SIC)</strong></td>
+        <td>Superintendencia de Industria y Comercio</td>
+        <td><span class="tag tag-verde">✅ Sí</span></td>
+        <td>Registrar bases de datos de clientes y empleados. Política de privacidad obligatoria. Ley 1581/2012</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- BLOQUE 7: CALENDARIO OBLIGACIONES -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📅</span>7. Calendario Anual de Cumplimiento (SAS con 10 empleados)</div>
+    <table>
+      <tr><th>Mes</th><th>Obligación</th><th>Tipo</th></tr>
+      <tr><td><strong>Enero</strong></td><td>Pago intereses sobre cesantías (antes del 31). PILA mes anterior. Retención mes anterior. Autoevaluación SGSST (si no se hizo en diciembre)</td><td><span class="tag tag-rojo">Crítico</span></td></tr>
+      <tr><td><strong>Febrero</strong></td><td>Consignación cesantías al fondo (antes del 14). Declaración y pago IVA bimestral (ene-feb). PILA. Retención</td><td><span class="tag tag-rojo">Crítico</span></td></tr>
+      <tr><td><strong>Marzo</strong></td><td>Renovación matrícula mercantil (antes del 31). Certificados ingresos y retenciones empleados (antes del 15). Información exógena (si aplica)</td><td><span class="tag tag-rojo">Crítico</span></td></tr>
+      <tr><td><strong>Abril</strong></td><td>Depósito estados financieros Cámara de Comercio. Declaración renta (grandes contrib.). Información exógena (plazo final)</td><td><span class="tag tag-amarillo">Importante</span></td></tr>
+      <tr><td><strong>Mayo</strong></td><td>Declaración renta SAS (demás obligados). IVA bimestral (mar-abr)</td><td><span class="tag tag-rojo">Crítico</span></td></tr>
+      <tr><td><strong>Junio</strong></td><td>Prima de servicios 1er semestre (antes del 30). IVA cuatrimestral (ene-abr si es cuatrimestral)</td><td><span class="tag tag-rojo">Crítico</span></td></tr>
+      <tr><td><strong>Julio</strong></td><td>IVA bimestral (may-jun). COPASST: elecciones anuales si corresponde</td><td><span class="tag tag-amarillo">Importante</span></td></tr>
+      <tr><td><strong>Agosto</strong></td><td>Declaración activos en el exterior (si aplica). Dotación 2do período (antes del 31)</td><td><span class="tag tag-amarillo">Importante</span></td></tr>
+      <tr><td><strong>Septiembre</strong></td><td>IVA bimestral (jul-ago). Revisión plan anual SST (ajuste tercer trimestre)</td><td><span class="tag tag-azul">Seguimiento</span></td></tr>
+      <tr><td><strong>Octubre</strong></td><td>IVA cuatrimestral (may-ago si cuatrimestral). Plan de trabajo SST año siguiente (inicio)</td><td><span class="tag tag-amarillo">Importante</span></td></tr>
+      <tr><td><strong>Noviembre</strong></td><td>IVA bimestral (sep-oct). Proyección cierre fiscal. Anticipo ICA (si aplica municipio)</td><td><span class="tag tag-amarillo">Importante</span></td></tr>
+      <tr><td><strong>Diciembre</strong></td><td>Prima 2do semestre (antes del 20). Dotación 3er período (antes del 20). Autoevaluación SGSST anual. Planeación tributaria año siguiente. IVA bimestral (nov-dic en feb)</td><td><span class="tag tag-rojo">Crítico</span></td></tr>
+    </table>
+    <div class="nota">* Adicionalmente: PILA y retención en la fuente se pagan cada mes. Nómina electrónica se transmite mensualmente. Las fechas exactas dependen de los dos últimos dígitos del NIT de la SAS.</div>
+  </div>
+
+  <!-- BLOQUE 8: TRANSICIÓN EMPLEADOS -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🔄</span>8. Transición de Empleados: de PN a SAS</div>
+    <div class="alerta alerta-warn" style="margin-bottom:16px">
+      <div class="alerta-icon">⚠️</div>
+      <div><strong>Punto crítico:</strong> Los 10 empleados actuales tienen contrato con Alejandro como persona natural. Al constituir la SAS, hay dos caminos legales. La elección incorrecta puede generar demandas laborales costosas.</div>
+    </div>
+    <div class="grid-2">
+      <div class="comp-col">
+        <div class="comp-header pn" style="font-size:0.9rem">Opción A: Sustitución Patronal (art. 67 CST)</div>
+        <div class="comp-body">
+          <div class="comp-row verde-row"><div class="lbl">Sin liquidación obligatoria</div><div class="val">✅ No se liquida</div></div>
+          <div class="comp-row verde-row"><div class="lbl">Antigüedad</div><div class="val">✅ Se respeta</div></div>
+          <div class="comp-row"><div class="lbl">¿Requiere acuerdo empleado?</div><div class="val">No, pero debe notificarse</div></div>
+          <div class="comp-row verde-row"><div class="lbl">Costo para la empresa</div><div class="val">✅ Bajo</div></div>
+          <div class="comp-row rojo-row"><div class="lbl">Responsabilidad solidaria</div><div class="val">⚠️ PN responde solidariamente 3 años</div></div>
+          <div class="comp-row"><div class="lbl">Recomendado cuando</div><div class="val">Empleados estables, buena relación</div></div>
+        </div>
+      </div>
+      <div class="comp-col">
+        <div class="comp-header sas" style="font-size:0.9rem">Opción B: Liquidación y Nuevo Contrato</div>
+        <div class="comp-body">
+          <div class="comp-row rojo-row"><div class="lbl">Liquidación obligatoria</div><div class="val">⚠️ Sí – todos los conceptos</div></div>
+          <div class="comp-row"><div class="lbl">Antigüedad</div><div class="val">Inicia de cero en la SAS</div></div>
+          <div class="comp-row"><div class="lbl">¿Requiere acuerdo empleado?</div><div class="val">Sí – mutuo acuerdo o justa causa</div></div>
+          <div class="comp-row rojo-row"><div class="lbl">Costo para la empresa</div><div class="val">⚠️ Alto (indemnizaciones posibles)</div></div>
+          <div class="comp-row verde-row"><div class="lbl">Responsabilidad solidaria</div><div class="val">✅ Ninguna (corte total)</div></div>
+          <div class="comp-row"><div class="lbl">Recomendado cuando</div><div class="val">Hay empleados conflictivos o con pasivos ocultos</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="alerta alerta-ok" style="margin-top:16px">
+      <div class="alerta-icon">💡</div>
+      <div><strong>Recomendación:</strong> Para la mayoría de los 10 empleados, usar <strong>Sustitución Patronal</strong>. Es más económico y genera menos conflicto. Para empleados con historial problemático o pasivos laborales ocultos, evaluar liquidación y nuevo contrato. <strong>Documentar todo con acta de subrogación notificada a cada empleado.</strong></div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 9: RESUMEN SEMÁFORO -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🚦</span>9. Semáforo de Cumplimiento – Estado Estimado</div>
+    <table>
+      <tr><th>Área</th><th>Estado Actual (PN)</th><th>Requerimiento SAS</th><th>Acción</th></tr>
+      <tr><td>Contratos de trabajo</td><td><span class="tag tag-verde">✅ Al día</span></td><td>Actualizar empleador a SAS</td><td><span class="tag tag-amarillo">Actualizar</span></td></tr>
+      <tr><td>Seguridad social (PILA)</td><td><span class="tag tag-verde">✅ Afiliados</span></td><td>Cambiar empleador en PILA</td><td><span class="tag tag-amarillo">Actualizar</span></td></tr>
+      <tr><td>Parafiscales (SENA/ICBF/CCF)</td><td><span class="tag tag-verde">✅ Al día</span></td><td>Cambiar empleador</td><td><span class="tag tag-amarillo">Actualizar</span></td></tr>
+      <tr><td>Reglamento Interno de Trabajo</td><td><span class="tag tag-amarillo">Verificar</span></td><td>Registrar a nombre de SAS ante MinTrabajo</td><td><span class="tag tag-rojo">Gestionar</span></td></tr>
+      <tr><td>SGSST</td><td><span class="tag tag-amarillo">Verificar</span></td><td>Implementar o actualizar para SAS</td><td><span class="tag tag-rojo">Prioridad</span></td></tr>
+      <tr><td>COPASST</td><td><span class="tag tag-amarillo">Verificar</span></td><td>Elegir nuevo con identidad SAS</td><td><span class="tag tag-rojo">Gestionar</span></td></tr>
+      <tr><td>Comité de Convivencia</td><td><span class="tag tag-amarillo">Verificar</span></td><td>Conformar si no existe</td><td><span class="tag tag-rojo">Gestionar</span></td></tr>
+      <tr><td>Nómina electrónica DIAN</td><td><span class="tag tag-amarillo">PN la genera</span></td><td>Habilitar en nombre de la SAS</td><td><span class="tag tag-rojo">Gestionar</span></td></tr>
+      <tr><td>Facturación electrónica</td><td><span class="tag tag-verde">✅ Habilitada</span></td><td>Migrar a NIT de la SAS</td><td><span class="tag tag-amarillo">Actualizar</span></td></tr>
+      <tr><td>Revisoría Fiscal</td><td>No aplica (PN)</td><td>Obligatoria (ingresos > $4.270M)</td><td><span class="tag tag-rojo">Contratar</span></td></tr>
+      <tr><td>Libros contables</td><td>Solo si obligado</td><td>Obligatorios desde constitución</td><td><span class="tag tag-rojo">Inscribir</span></td></tr>
+      <tr><td>Matrícula mercantil SAS</td><td>No aplica</td><td>Al constituir</td><td><span class="tag tag-rojo">Registrar</span></td></tr>
+      <tr><td>Protección datos (SIC)</td><td><span class="tag tag-amarillo">Verificar</span></td><td>Política privacidad, registro BD</td><td><span class="tag tag-amarillo">Actualizar</span></td></tr>
+      <tr><td>Gestión RESPEL (residuos)</td><td><span class="tag tag-amarillo">Verificar</span></td><td>Registro ante autoridad ambiental</td><td><span class="tag tag-amarillo">Verificar</span></td></tr>
+    </table>
+  </div>
+
+
+  <!-- BLOQUE 10: COSTOS ADICIONALES SAS vs PN -->
+  <div class="card">
+    <div class="card-title"><span class="icon">💰</span>10. Costos Adicionales: SAS vs Persona Natural</div>
+
+    <div class="alerta alerta-info" style="margin-bottom:20px">
+      <div class="alerta-icon">ℹ️</div>
+      <div><strong>Criterio:</strong> Alejandro ya paga varios de estos costos como persona natural. Se identifican solo los costos <em>nuevos o incrementales</em> que genera pasar a SAS.</div>
+    </div>
+
+    <table>
+      <tr>
+        <th>Concepto</th>
+        <th style="text-align:center">Persona Natural</th>
+        <th style="text-align:center">SAS</th>
+        <th style="text-align:right">Costo Adicional/Año</th>
+        <th>Observación</th>
+      </tr>
+
+      <tr style="background:#f8fafc">
+        <td colspan="5" style="font-weight:700;color:#0d2137;padding:10px 14px;font-size:0.85rem">📋 CÁMARA DE COMERCIO</td>
+      </tr>
+      <tr>
+        <td>Matrícula mercantil persona natural</td>
+        <td style="text-align:center"><span class="tag tag-verde">Ya paga</span></td>
+        <td style="text-align:center"><span class="tag tag-rojo">Se cancela</span></td>
+        <td style="text-align:right">—</td>
+        <td>Al constituir la SAS la matrícula PN se cancela y se abre la de la SAS</td>
+      </tr>
+      <tr>
+        <td>Renovación anual matrícula SAS</td>
+        <td style="text-align:center">—</td>
+        <td style="text-align:center"><span class="tag tag-rojo">Nueva</span></td>
+        <td style="text-align:right;font-weight:700;color:#dc2626">~$800.000 – $2.000.000</td>
+        <td>Aprox. 0.7‰ sobre activos totales. Con $1.800M activos: ~$1.260.000/año</td>
+      </tr>
+      <tr>
+        <td>Renovación establecimientos de comercio</td>
+        <td style="text-align:center"><span class="tag tag-verde">Ya paga</span></td>
+        <td style="text-align:center"><span class="tag tag-amarillo">Actualizar</span></td>
+        <td style="text-align:right">Similar al actual</td>
+        <td>Se actualiza el titular al nombre de la SAS. Sin costo adicional relevante</td>
+      </tr>
+      <tr style="background:#f0fdf4">
+        <td><strong>Diferencial neto Cámara de Comercio</strong></td>
+        <td colspan="2" style="text-align:center">Costo marginal mayor por base de activos SAS</td>
+        <td style="text-align:right;font-weight:700;color:#d97706">~$200.000 – $600.000/año</td>
+        <td>Incremento pequeño respecto a lo que paga hoy</td>
+      </tr>
+
+      <tr style="background:#f8fafc">
+        <td colspan="5" style="font-weight:700;color:#0d2137;padding:10px 14px;font-size:0.85rem">🔍 REVISORÍA FISCAL</td>
+      </tr>
+      <tr>
+        <td>Revisoría Fiscal – persona natural</td>
+        <td style="text-align:center"><span class="tag tag-verde">No aplica</span></td>
+        <td style="text-align:center">—</td>
+        <td style="text-align:right">$0</td>
+        <td>Las personas naturales no están obligadas a Revisoría Fiscal</td>
+      </tr>
+      <tr>
+        <td><strong>Revisoría Fiscal – SAS</strong></td>
+        <td style="text-align:center">—</td>
+        <td style="text-align:center"><span class="tag tag-rojo">Obligatoria</span></td>
+        <td style="text-align:right;font-weight:700;color:#dc2626">$4.000.000 – $10.000.000/año</td>
+        <td><strong>Obligatoria</strong>: ingresos $9.500M superan umbral 3.000 SMLMV ($4.270M). Art. 203 C.Co. Contratar Revisor inscrito en JCC.</td>
+      </tr>
+      <tr style="background:#fee2e2">
+        <td><strong>Diferencial neto Revisoría Fiscal</strong></td>
+        <td colspan="2" style="text-align:center">Costo 100% nuevo – no existe en PN</td>
+        <td style="text-align:right;font-weight:800;color:#dc2626">$4M – $10M/año</td>
+        <td>Es el mayor costo adicional de la SAS. Presupuestar desde el inicio.</td>
+      </tr>
+
+      <tr style="background:#f8fafc">
+        <td colspan="5" style="font-weight:700;color:#0d2137;padding:10px 14px;font-size:0.85rem">🦺 SALUD OCUPACIONAL / SGSST</td>
+      </tr>
+      <tr>
+        <td>Profesional / Técnico SST</td>
+        <td style="text-align:center"><span class="tag tag-verde">Ya paga</span></td>
+        <td style="text-align:center"><span class="tag tag-verde">Continúa igual</span></td>
+        <td style="text-align:right;font-weight:700;color:#16a34a">$0 adicional</td>
+        <td>El mismo profesional de salud ocupacional continúa, ahora a nombre de la SAS. El costo NO cambia por el tipo de figura jurídica.</td>
+      </tr>
+      <tr>
+        <td>ARL – aportes empleados</td>
+        <td style="text-align:center"><span class="tag tag-verde">Ya paga</span></td>
+        <td style="text-align:center"><span class="tag tag-amarillo">Actualizar empleador</span></td>
+        <td style="text-align:right;font-weight:700;color:#16a34a">$0 adicional</td>
+        <td>Se cambia el empleador en la ARL de Alejandro PN a la SAS. Tarifa (Clase II ~1.044%) no cambia.</td>
+      </tr>
+      <tr>
+        <td>Exámenes médicos ocupacionales</td>
+        <td style="text-align:center"><span class="tag tag-verde">Ya paga</span></td>
+        <td style="text-align:center"><span class="tag tag-verde">Continúa igual</span></td>
+        <td style="text-align:right;font-weight:700;color:#16a34a">$0 adicional</td>
+        <td>Solo hay costo por nuevos ingresos o retiros de personal</td>
+      </tr>
+      <tr>
+        <td>Actualización documentos SGSST (nombre SAS)</td>
+        <td style="text-align:center">—</td>
+        <td style="text-align:center"><span class="tag tag-amarillo">Una sola vez</span></td>
+        <td style="text-align:right;font-weight:700;color:#d97706">$200.000 – $500.000</td>
+        <td>Actualizar política SST, RIT, plan de trabajo y documentos con el nombre de la SAS. Costo único.</td>
+      </tr>
+      <tr style="background:#f0fdf4">
+        <td><strong>Diferencial neto Salud Ocupacional</strong></td>
+        <td colspan="2" style="text-align:center">Prácticamente sin cambio – solo actualización documental</td>
+        <td style="text-align:right;font-weight:700;color:#16a34a">~$0 anual</td>
+        <td>Gran ventaja: este costo ya está asumido hoy como PN con 10 empleados</td>
+      </tr>
+
+      <tr style="background:#f8fafc">
+        <td colspan="5" style="font-weight:700;color:#0d2137;padding:10px 14px;font-size:0.85rem">📊 CONTABILIDAD Y DECLARACIONES</td>
+      </tr>
+      <tr>
+        <td>Honorarios contador – persona natural</td>
+        <td style="text-align:center"><span class="tag tag-verde">Ya paga</span></td>
+        <td style="text-align:center">—</td>
+        <td style="text-align:right">—</td>
+        <td>Alejandro ya paga contador para renta anual, IVA y retenciones</td>
+      </tr>
+      <tr>
+        <td>Contabilidad mensual NIIF + declaraciones SAS</td>
+        <td style="text-align:center">—</td>
+        <td style="text-align:center"><span class="tag tag-rojo">Mayor carga</span></td>
+        <td style="text-align:right;font-weight:700;color:#dc2626">+$2.000.000 – $6.000.000/año</td>
+        <td>SAS exige contabilidad mensual completa, retenciones mensuales, nómina electrónica, estados financieros anuales. Mayor complejidad = mayor honorario.</td>
+      </tr>
+      <tr>
+        <td>Software contable completo (inventarios + nómina)</td>
+        <td style="text-align:center"><span class="tag tag-amarillo">Básico</span></td>
+        <td style="text-align:center"><span class="tag tag-rojo">Completo</span></td>
+        <td style="text-align:right;font-weight:700;color:#d97706">$1.000.000 – $3.000.000/año</td>
+        <td>Siigo, Helisa, World Office, Alegra. Módulos: inventarios, nómina, facturación electrónica, NIIF.</td>
+      </tr>
+
+      <tr style="background:#f8fafc">
+        <td colspan="5" style="font-weight:700;color:#0d2137;padding:10px 14px;font-size:0.85rem">🛡️ SEGUROS (Recomendados)</td>
+      </tr>
+      <tr>
+        <td>Póliza responsabilidad civil empresarial</td>
+        <td style="text-align:center"><span class="tag tag-rojo">No tiene</span></td>
+        <td style="text-align:center"><span class="tag tag-verde">Recomendada</span></td>
+        <td style="text-align:right;font-weight:700;color:#d97706">$800.000 – $2.000.000/año</td>
+        <td>Protege a la SAS ante demandas de clientes y terceros. Complementa la separación patrimonial.</td>
+      </tr>
+      <tr>
+        <td>Póliza de vida / key man (beneficiaria SAS)</td>
+        <td style="text-align:center">—</td>
+        <td style="text-align:center"><span class="tag tag-verde">Recomendada</span></td>
+        <td style="text-align:right;font-weight:700;color:#d97706">$600.000 – $1.500.000/año</td>
+        <td>Cubre el capital de trabajo ante fallecimiento del socio-gerente. Opcional pero conveniente.</td>
+      </tr>
+    </table>
+
+    <!-- RESUMEN TOTAL -->
+    <div style="margin-top:24px">
+      <div style="font-weight:700;color:#0d2137;font-size:1rem;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #e2e8f0">
+        📌 Resumen Total de Costos Adicionales Netos (SAS vs PN)
+      </div>
+      <div class="grid-2">
+        <div>
+          <table>
+            <tr><th>Concepto</th><th style="text-align:right">Costo Adicional/Año</th></tr>
+            <tr><td>Revisoría Fiscal (nueva obligación)</td><td style="text-align:right;color:#dc2626;font-weight:700">$4.000.000 – $10.000.000</td></tr>
+            <tr><td>Mayor carga contable</td><td style="text-align:right;color:#dc2626;font-weight:700">$2.000.000 – $6.000.000</td></tr>
+            <tr><td>Software contable completo</td><td style="text-align:right;color:#d97706;font-weight:700">$1.000.000 – $3.000.000</td></tr>
+            <tr><td>Cámara de Comercio (diferencial)</td><td style="text-align:right;color:#d97706;font-weight:700">$200.000 – $600.000</td></tr>
+            <tr><td>Salud Ocupacional / SGSST</td><td style="text-align:right;color:#16a34a;font-weight:700">$0 (ya asumido)</td></tr>
+            <tr><td>Seguridad social 10 empleados</td><td style="text-align:right;color:#16a34a;font-weight:700">$0 (ya asumido)</td></tr>
+            <tr><td>Seguros recomendados (opcional)</td><td style="text-align:right;color:#d97706;font-weight:700">$1.400.000 – $3.500.000</td></tr>
+            <tr style="background:#fff7ed">
+              <td><strong>TOTAL COSTOS ADICIONALES / AÑO</strong></td>
+              <td style="text-align:right;font-weight:800;color:#dc2626"><strong>$7.200.000 – $20.100.000</strong></td>
+            </tr>
+          </table>
+        </div>
+        <div>
+          <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:16px;margin-bottom:12px">
+            <div style="font-weight:700;color:#166534;margin-bottom:8px">✅ Costos que NO cambian con la SAS</div>
+            <div style="font-size:0.82rem;color:#374151;line-height:1.6">
+              • Seguridad social PILA 10 empleados<br>
+              • Parafiscales (SENA, ICBF, CCF)<br>
+              • Cesantías e intereses de cesantías<br>
+              • ARL (solo cambia el empleador)<br>
+              • Profesional de Salud Ocupacional<br>
+              • Exámenes médicos ocupacionales<br>
+              • Prestaciones sociales (prima, vacaciones, dotación)
+            </div>
+          </div>
+          <div style="background:#dbeafe;border:1px solid #93c5fd;border-radius:10px;padding:14px">
+            <div style="font-size:0.83rem;color:#1e40af;line-height:1.6">
+              <strong>¿Vale la pena?</strong><br>
+              El costo adicional máximo (~$20M/año) representa apenas el <strong>0.2% de los ingresos brutos</strong> ($9.500M) y el <strong>5.7% de la renta líquida</strong> ($352M).<br><br>
+              A cambio, se protege un patrimonio de <strong>$4.063M</strong> frente a riesgos comerciales, laborales y fiscales. La relación costo-beneficio es altamente favorable.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- cierre page-requisitos -->
+
+<footer>
+  <strong>Asesoría Estructuración Societaria – Alejandro Forero Rueda</strong> · Preparado por: Jorge Estrada · contador@lacarolina.com.co<br>
+  Basado en datos de Formulario 210 año gravable 2025 · Normatividad: Ley 1258/2008, ET art. 240-241, DIAN 2025<br>
+  <span style="color:#475569">Este documento es de uso exclusivo del cliente y su asesor. No constituye concepto jurídico ni tributario vinculante.</span>
+</footer>
+
+<script>
+  function showPage(btn, id) {
+    document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+    document.querySelectorAll('.nav-btn').forEach(function(b){ b.classList.remove('active'); });
+    var pg = document.getElementById('page-' + id);
+    if (pg) { pg.classList.add('active'); }
+    if (btn) { btn.classList.add('active'); }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showPill(btn, id) {
+    var card = btn.closest('.card');
+    if (!card) card = btn.parentElement.parentElement;
+    card.querySelectorAll('.pill-tab').forEach(function(t){ t.classList.remove('active'); });
+    card.querySelectorAll('.pill-content').forEach(function(c){ c.classList.remove('active'); });
+    btn.classList.add('active');
+    var el = document.getElementById(id);
+    if (el) el.classList.add('active');
+  }
+
+  window.addEventListener('load', function() {
+    document.querySelectorAll('.bar-fill').forEach(function(bar) {
+      var w = bar.style.width; bar.style.width = '0'; 
+      setTimeout(function(){ bar.style.width = w; }, 100);
+    });
+  });
+</script>
+</body>
+</html>
