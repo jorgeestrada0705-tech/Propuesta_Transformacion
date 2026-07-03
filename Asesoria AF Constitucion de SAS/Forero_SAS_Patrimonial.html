@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAS Patrimonial – Forero Rueda | Análisis de Estructura Holding</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --surface2: #263246;
+    --border: #334155;
+    --accent: #f59e0b;
+    --accent2: #10b981;
+    --danger: #ef4444;
+    --warn: #f59e0b;
+    --ok: #10b981;
+    --info: #3b82f6;
+    --purple: #8b5cf6;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --nav-h: 110px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 15px; line-height: 1.6; }
+
+  /* NAV */
+  nav { position: sticky; top: 0; z-index: 100; background: #0f172a; border-bottom: 1px solid var(--border); }
+  .nav-row1, .nav-row2 { display: flex; align-items: center; gap: 6px; padding: 6px 16px; overflow-x: auto; }
+  .nav-row1 { border-bottom: 1px solid #1e293b; }
+  .nav-brand { font-weight: 700; font-size: 0.82rem; color: var(--accent); white-space: nowrap; margin-right: 8px; }
+  .nav-btn {
+    padding: 6px 13px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--muted); cursor: pointer; font-size: 0.78rem;
+    white-space: nowrap; transition: all 0.15s;
+  }
+  .nav-btn:hover { background: var(--surface2); color: var(--text); }
+  .nav-btn.active { background: var(--accent); color: #0f172a; border-color: var(--accent); font-weight: 700; }
+
+  /* PAGES */
+  .page { display: none; padding: 28px 24px 60px; max-width: 1100px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* HERO */
+  .hero { background: linear-gradient(135deg, #1e293b 0%, #1e3a5f 100%); border-radius: 14px; padding: 32px; margin-bottom: 24px; border: 1px solid #334155; }
+  .hero h1 { font-size: 1.7rem; font-weight: 800; margin-bottom: 6px; }
+  .hero p { color: var(--muted); font-size: 0.92rem; }
+  .hero .badge { display: inline-block; background: #f59e0b22; border: 1px solid var(--accent); color: var(--accent); border-radius: 20px; padding: 3px 12px; font-size: 0.75rem; font-weight: 700; margin-bottom: 12px; }
+
+  /* CARDS */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin-bottom: 18px; }
+  .card h2 { font-size: 1.05rem; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 10px; color: var(--accent); }
+
+  /* GRIDS */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  @media(max-width:800px) { .grid3, .grid4 { grid-template-columns: 1fr 1fr; } .grid2 { grid-template-columns: 1fr; } }
+  @media(max-width:520px) { .grid3, .grid4 { grid-template-columns: 1fr; } }
+
+  /* KPI */
+  .kpi { background: var(--surface2); border-radius: 10px; padding: 16px; text-align: center; border: 1px solid var(--border); }
+  .kpi .val { font-size: 1.45rem; font-weight: 800; }
+  .kpi .lbl { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
+  .kpi.danger { border-color: var(--danger); }
+  .kpi.ok { border-color: var(--ok); }
+  .kpi.warn { border-color: var(--warn); }
+  .kpi.info { border-color: var(--info); }
+  .kpi.purple { border-color: var(--purple); }
+
+  /* SCENARIO CARDS */
+  .scenario-card { background: var(--surface2); border-radius: 12px; padding: 20px; border: 2px solid var(--border); }
+  .scenario-card.bad { border-color: var(--danger); }
+  .scenario-card.mid { border-color: var(--warn); }
+  .scenario-card.good { border-color: var(--ok); }
+  .scenario-card .sc-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .scenario-card .sc-title { font-size: 1rem; font-weight: 800; }
+  .scenario-card .sc-badge { padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; }
+  .sc-badge.red { background: #ef444422; color: var(--danger); }
+  .sc-badge.yellow { background: #f59e0b22; color: var(--warn); }
+  .sc-badge.green { background: #10b98122; color: var(--ok); }
+
+  /* RISK ITEMS */
+  .risk-item { display: flex; gap: 12px; padding: 13px; background: var(--surface2); border-radius: 9px; margin-bottom: 10px; border-left: 4px solid var(--danger); }
+  .risk-item.warn { border-left-color: var(--warn); }
+  .risk-item.ok { border-left-color: var(--ok); }
+  .risk-item.info { border-left-color: var(--info); }
+  .risk-item .ri-icon { font-size: 1.3rem; flex-shrink: 0; }
+  .risk-item .ri-title { font-weight: 700; font-size: 0.88rem; margin-bottom: 3px; }
+  .risk-item .ri-body { font-size: 0.82rem; color: var(--muted); }
+  .risk-item .ri-norm { font-size: 0.72rem; color: #60a5fa; margin-top: 4px; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  th { background: #1a2744; padding: 10px 12px; text-align: left; font-size: 0.76rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  tr:hover td { background: #1e293b99; }
+  .tag { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; }
+  .tag.red { background: #ef444420; color: #f87171; }
+  .tag.green { background: #10b98120; color: #34d399; }
+  .tag.yellow { background: #f59e0b20; color: #fbbf24; }
+  .tag.blue { background: #3b82f620; color: #60a5fa; }
+  .tag.purple { background: #8b5cf620; color: #a78bfa; }
+
+  /* PROGRESS BAR */
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 0.82rem; }
+  .bar-label { width: 180px; flex-shrink: 0; color: var(--muted); }
+  .bar-track { flex: 1; background: var(--border); border-radius: 99px; height: 8px; }
+  .bar-fill { height: 8px; border-radius: 99px; }
+  .bar-val { width: 60px; text-align: right; font-weight: 700; font-size: 0.8rem; }
+
+  /* STEPS */
+  .step { display: flex; gap: 14px; margin-bottom: 14px; }
+  .step-num { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #0f172a; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; }
+  .step-body .st-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 3px; }
+  .step-body .st-desc { font-size: 0.82rem; color: var(--muted); }
+
+  /* PILLS */
+  .pill-nav { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+  .pill-btn { padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface2); color: var(--muted); cursor: pointer; font-size: 0.78rem; transition: all 0.15s; }
+  .pill-btn:hover { border-color: var(--accent); color: var(--text); }
+  .pill-btn.active { background: var(--accent); color: #0f172a; border-color: var(--accent); font-weight: 700; }
+  .pill-content { display: none; }
+  .pill-content.active { display: block; }
+
+  /* SEMAFORO */
+  .semaforo { display: flex; gap: 12px; }
+  .sem-dot { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+  .sem-dot.r { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
+  .sem-dot.y { background: var(--warn); box-shadow: 0 0 8px var(--warn); }
+  .sem-dot.g { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+
+  /* ALERT BOX */
+  .alert { border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; font-size: 0.87rem; border: 1px solid; }
+  .alert.danger { background: #ef444410; border-color: var(--danger); }
+  .alert.warn { background: #f59e0b10; border-color: var(--warn); }
+  .alert.ok { background: #10b98110; border-color: var(--ok); }
+  .alert.info { background: #3b82f610; border-color: var(--info); }
+  .alert strong { display: block; margin-bottom: 4px; }
+
+  /* FOOTER */
+  .footer { background: var(--surface); border-top: 1px solid var(--border); padding: 16px 24px; text-align: center; font-size: 0.75rem; color: var(--muted); position: fixed; bottom: 0; left: 0; right: 0; }
+
+  /* vs box */
+  .vs-box { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 14px; margin-bottom: 10px; }
+  .vs-box .vb-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 8px; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+
+  .highlight { color: var(--accent); font-weight: 700; }
+  .highlight-green { color: var(--ok); font-weight: 700; }
+  .highlight-red { color: var(--danger); font-weight: 700; }
+  .highlight-blue { color: var(--info); font-weight: 700; }
+  .highlight-purple { color: var(--purple); font-weight: 700; }
+
+  ul.check { list-style: none; padding: 0; }
+  ul.check li { padding: 4px 0 4px 22px; position: relative; font-size: 0.85rem; color: var(--muted); }
+  ul.check li::before { content: '✔'; position: absolute; left: 0; color: var(--ok); }
+  ul.check li.bad::before { content: '✖'; color: var(--danger); }
+  ul.check li.warn::before { content: '⚠'; color: var(--warn); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-row1">
+    <div class="nav-brand">🏛️ Forero – SAS Patrimonial</div>
+    <button class="nav-btn active" onclick="showPage(this,'resumen')">📋 Resumen</button>
+    <button class="nav-btn" onclick="showPage(this,'escenarios')">⚖️ 3 Escenarios</button>
+    <button class="nav-btn" onclick="showPage(this,'riesgos')">🚨 Riesgos del Modelo</button>
+    <button class="nav-btn" onclick="showPage(this,'fiscal')">🧮 Análisis Fiscal</button>
+  </div>
+  <div class="nav-row2">
+    <div class="nav-brand" style="font-size:0.72rem;color:#64748b;padding-right:4px;">↳ más</div>
+    <button class="nav-btn" onclick="showPage(this,'proteccion')">🔒 Protección Real</button>
+    <button class="nav-btn" onclick="showPage(this,'requisitos')">📋 Requisitos Legales</button>
+    <button class="nav-btn" onclick="showPage(this,'alternativas')">💡 Alternativas</button>
+    <button class="nav-btn" onclick="showPage(this,'recomendacion')" style="color:#fbbf24;font-weight:700">✅ Recomendación</button>
+  </div>
+</nav>
+
+<!-- ===== PAGE 1: RESUMEN ===== -->
+<div class="page active" id="page-resumen">
+  <div class="hero">
+    <div class="badge">ANÁLISIS DE ESTRUCTURA PATRIMONIAL</div>
+    <h1>🏛️ SAS Solo para Bienes:<br>¿Protege o es una ilusión?</h1>
+    <p>Alejandro José Forero Rueda · NIT 72.215.179-5 · CIIU 4530 · Preparado por Jorge Estrada · Julio 2026</p>
+  </div>
+
+  <div class="alert warn">
+    <strong>⚠️ La pregunta clave</strong>
+    Una SAS creada <em>únicamente para separar bienes</em> (sin trasladar la operación) NO elimina los riesgos comerciales de la persona natural. Los riesgos siguen existiendo mientras Alejandro siga operando el negocio como PN.
+  </div>
+
+  <div class="grid4" style="margin-bottom:18px;">
+    <div class="kpi warn">
+      <div class="val">$9.5B</div>
+      <div class="lbl">Ingresos del negocio (PN)</div>
+    </div>
+    <div class="kpi danger">
+      <div class="val">$4.06B</div>
+      <div class="lbl">Patrimonio en riesgo</div>
+    </div>
+    <div class="kpi ok">
+      <div class="val">$1.80B</div>
+      <div class="lbl">Patrimonio líquido neto</div>
+    </div>
+    <div class="kpi info">
+      <div class="val">10</div>
+      <div class="lbl">Empleados (pasivos laborales)</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>🏗️ ¿Qué es una SAS solo para bienes?</h2>
+      <p style="font-size:0.87rem;color:var(--muted);margin-bottom:14px;">Se refiere a crear una SAS cuyo objeto es <strong>únicamente poseer y administrar activos</strong>, mientras Alejandro sigue operando el negocio de repuestos como persona natural.</p>
+      <p style="font-size:0.87rem;color:var(--muted);margin-bottom:14px;">Existen dos variantes principales:</p>
+      <div class="vs-box">
+        <div class="vb-title">🅰 SAS que recibe los bienes personales</div>
+        <p style="font-size:0.82rem;color:var(--muted);">La casa, los ahorros e inversiones personales se transfieren a la SAS. El negocio sigue con la PN. La SAS actúa como escudo del patrimonio personal.</p>
+      </div>
+      <div class="vs-box">
+        <div class="vb-title">🅱 SAS que recibe los activos del negocio</div>
+        <p style="font-size:0.82rem;color:var(--muted);">Inventarios, cuentas por cobrar, PP&E se transfieren a la SAS. La SAS los alquila/presta a la PN para que siga operando. Estructura más compleja y cuestionable.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📊 Riesgos según el escenario elegido</h2>
+      <div class="bar-row">
+        <div class="bar-label">PN solo (sin cambios)</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%;background:#ef4444;"></div></div>
+        <div class="bar-val highlight-red">CRÍTICO</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">SAS solo bienes personales</div>
+        <div class="bar-track"><div class="bar-fill" style="width:60%;background:#f59e0b;"></div></div>
+        <div class="bar-val highlight">MEDIO</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">SAS solo activos negocio</div>
+        <div class="bar-track"><div class="bar-fill" style="width:70%;background:#f59e0b;"></div></div>
+        <div class="bar-val highlight">ALTO</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">SAS operativa completa</div>
+        <div class="bar-track"><div class="bar-fill" style="width:25%;background:#10b981;"></div></div>
+        <div class="bar-val highlight-green">BAJO</div>
+      </div>
+      <hr>
+      <p style="font-size:0.8rem;color:var(--muted);">La SAS solo para bienes reduce pero <strong>no elimina</strong> los riesgos. La protección efectiva requiere mover la operación completa.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>💡 Los 3 hallazgos principales</h2>
+    <div class="grid3">
+      <div class="risk-item warn" style="flex-direction:column;">
+        <div class="ri-icon">⚠️</div>
+        <div>
+          <div class="ri-title">Si la operación sigue en PN</div>
+          <div class="ri-body">Acreedores comerciales, DIAN y empleados pueden embargar bienes personales aunque la SAS exista. La PN tiene responsabilidad ilimitada.</div>
+        </div>
+      </div>
+      <div class="risk-item" style="flex-direction:column;">
+        <div class="ri-icon">🚨</div>
+        <div>
+          <div class="ri-title">Acción Pauliana: riesgo real</div>
+          <div class="ri-body">Si ya existen deudas con proveedores ($2.267M) y se transfieren activos a la SAS, acreedores pueden pedir revocación de la transferencia (Art. 2491 CC).</div>
+        </div>
+      </div>
+      <div class="risk-item ok" style="flex-direction:column;border-left-color:var(--ok);">
+        <div class="ri-icon">✅</div>
+        <div>
+          <div class="ri-title">La mejor alternativa</div>
+          <div class="ri-body">Combinar SAS Operativa (para el negocio) + protección de vivienda por ley (Art. 38 Ley 3/1991). Máxima protección con menor costo y riesgo legal.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 2: 3 ESCENARIOS ===== -->
+<div class="page" id="page-escenarios">
+  <div class="hero">
+    <div class="badge">COMPARATIVO DE ESTRUCTURAS</div>
+    <h1>⚖️ Los 3 Escenarios</h1>
+    <p>Persona Natural sola · SAS solo bienes · SAS operativa completa</p>
+  </div>
+
+  <div class="grid3" style="margin-bottom:20px;">
+    <div class="scenario-card bad">
+      <div class="sc-header">
+        <div>
+          <div class="sc-title">Escenario 1</div>
+          <div style="font-size:0.78rem;color:var(--muted);">🧑 PN sin cambios</div>
+        </div>
+        <span class="sc-badge red">ALTO RIESGO</span>
+      </div>
+      <ul class="check">
+        <li class="bad">Responsabilidad ilimitada sobre patrimonio personal</li>
+        <li class="bad">Casa y ahorros expuestos a deudas comerciales</li>
+        <li class="bad">Patrimonio $1.8B embargable sin restricción</li>
+        <li class="bad">Tasa de renta hasta el 39% en renta presuntiva</li>
+        <li class="bad">Impuesto al patrimonio si supera umbrales</li>
+        <li class="bad">10 empleados generan pasivos laborales directos</li>
+        <li>Simple de administrar</li>
+        <li>Sin costo adicional de estructura</li>
+      </ul>
+    </div>
+
+    <div class="scenario-card mid">
+      <div class="sc-header">
+        <div>
+          <div class="sc-title">Escenario 2</div>
+          <div style="font-size:0.78rem;color:var(--muted);">🏛️ SAS solo para bienes</div>
+        </div>
+        <span class="sc-badge yellow">RIESGO MEDIO</span>
+      </div>
+      <ul class="check">
+        <li class="warn">Protección parcial: solo los bienes dentro de la SAS</li>
+        <li class="warn">PN sigue con responsabilidad ilimitada por operación</li>
+        <li class="warn">Riesgo de acción pauliana si hay deudas previas</li>
+        <li class="warn">Doble contabilidad: PN + SAS</li>
+        <li class="warn">Sin ahorro fiscal significativo en operación</li>
+        <li>Casa personal puede quedar en SAS</li>
+        <li>Activos personales separados del negocio</li>
+        <li class="bad">No elimina riesgo laboral ni comercial de PN</li>
+      </ul>
+    </div>
+
+    <div class="scenario-card good">
+      <div class="sc-header">
+        <div>
+          <div class="sc-title">Escenario 3</div>
+          <div style="font-size:0.78rem;color:var(--muted);">🏢 SAS Operativa completa</div>
+        </div>
+        <span class="sc-badge green">RIESGO BAJO</span>
+      </div>
+      <ul class="check">
+        <li>Separación total: operación + patrimonio en SAS</li>
+        <li>Responsabilidad limitada al capital aportado</li>
+        <li>Tasa corporativa 35% (vs. hasta 39% PN)</li>
+        <li>Dividendos con tarifa escalonada 15%/35%</li>
+        <li>Empleados a nombre de la SAS, no de Alejandro</li>
+        <li>Revisoría Fiscal obligatoria (nueva obligación)</li>
+        <li class="warn">Costo adicional $8M–$20M/año</li>
+        <li>Protección total del patrimonio personal</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📊 Comparativo Detallado de los 3 Escenarios</h2>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Aspecto</th>
+            <th>PN sin cambios</th>
+            <th>SAS solo bienes</th>
+            <th>SAS Operativa</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Responsabilidad</strong></td>
+            <td><span class="tag red">Ilimitada</span></td>
+            <td><span class="tag yellow">Ilimitada en operación</span></td>
+            <td><span class="tag green">Limitada al capital</span></td>
+          </tr>
+          <tr>
+            <td><strong>Protección casa habitual</strong></td>
+            <td><span class="tag red">Sin protección</span></td>
+            <td><span class="tag green">Protegida (en SAS)</span></td>
+            <td><span class="tag green">Protegida (fuera del negocio)</span></td>
+          </tr>
+          <tr>
+            <td><strong>Inventarios en riesgo</strong></td>
+            <td><span class="tag red">$1.747M expuestos</span></td>
+            <td><span class="tag red">Sigue en PN</span></td>
+            <td><span class="tag green">En SAS, protegidos</span></td>
+          </tr>
+          <tr>
+            <td><strong>Riesgo laboral (10 emp.)</strong></td>
+            <td><span class="tag red">Patrimonio personal</span></td>
+            <td><span class="tag red">Patrimonio personal</span></td>
+            <td><span class="tag green">Solo activos SAS</span></td>
+          </tr>
+          <tr>
+            <td><strong>Tasa impuesto renta</strong></td>
+            <td><span class="tag yellow">Progresiva PN</span></td>
+            <td><span class="tag yellow">Progresiva PN (igual)</span></td>
+            <td><span class="tag green">35% flat corporativo</span></td>
+          </tr>
+          <tr>
+            <td><strong>Acción Pauliana (riesgo)</strong></td>
+            <td><span class="tag blue">N/A</span></td>
+            <td><span class="tag red">Alto (traslado de activos)</span></td>
+            <td><span class="tag yellow">Moderado (aporte)</span></td>
+          </tr>
+          <tr>
+            <td><strong>Complejidad administrativa</strong></td>
+            <td><span class="tag green">Simple</span></td>
+            <td><span class="tag red">Doble (PN + SAS)</span></td>
+            <td><span class="tag yellow">Una sola entidad</span></td>
+          </tr>
+          <tr>
+            <td><strong>Costo adicional/año</strong></td>
+            <td><span class="tag green">$0</span></td>
+            <td><span class="tag yellow">$4M–$12M (doble contabilidad)</span></td>
+            <td><span class="tag yellow">$8M–$20M</span></td>
+          </tr>
+          <tr>
+            <td><strong>Impto. dividendos</strong></td>
+            <td><span class="tag blue">N/A (no aplica)</span></td>
+            <td><span class="tag blue">N/A (no hay dividendos PN)</span></td>
+            <td><span class="tag yellow">15%–35% sobre utilidades</span></td>
+          </tr>
+          <tr>
+            <td><strong>Revisoría Fiscal</strong></td>
+            <td><span class="tag green">No obligatoria</span></td>
+            <td><span class="tag yellow">Solo si SAS supera umbral</span></td>
+            <td><span class="tag red">Obligatoria ($4M–$10M/año)</span></td>
+          </tr>
+          <tr>
+            <td><strong>Resultado global</strong></td>
+            <td><span class="tag red">❌ Muy riesgoso</span></td>
+            <td><span class="tag yellow">⚠ Protección parcial</span></td>
+            <td><span class="tag green">✅ Protección completa</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="alert info">
+    <strong>🔑 Conclusión del comparativo</strong>
+    La SAS solo para bienes tiene el problema de que <strong>dobla la complejidad administrativa sin eliminar los riesgos de la operación</strong>. Alejandro sigue siendo responsable ilimitado como PN mientras el negocio funcione a su nombre.
+  </div>
+</div>
+
+<!-- ===== PAGE 3: RIESGOS ===== -->
+<div class="page" id="page-riesgos">
+  <div class="hero">
+    <div class="badge">RIESGOS ESPECÍFICOS</div>
+    <h1>🚨 Riesgos del Modelo "SAS Solo Bienes"</h1>
+    <p>Análisis jurídico y fiscal de las vulnerabilidades específicas de esta estructura</p>
+  </div>
+
+  <div class="alert danger">
+    <strong>🔴 Advertencia fundamental</strong>
+    Una SAS creada SOLO para albergar bienes, mientras la PN sigue operando, puede ser atacada jurídicamente por acreedores, la DIAN y jueces laborales. Su eficacia depende de cuándo y cómo se crea.
+  </div>
+
+  <div class="card">
+    <h2>⚖️ Riesgo 1 – Acción Pauliana (Art. 2491 CC)</h2>
+    <div class="risk-item" style="flex-direction:column;">
+      <div style="display:flex;gap:12px;">
+        <div class="ri-icon">⚖️</div>
+        <div>
+          <div class="ri-title">¿En qué consiste?</div>
+          <div class="ri-body">Si Alejandro transfiere activos a la SAS mientras ya tiene deudas con proveedores ($2.267M), dichos acreedores pueden demandar la <strong>revocación de la transferencia</strong>. El juez puede declarar como si nunca hubiera ocurrido.</div>
+          <div class="ri-norm">⚖️ Art. 2491 Código Civil colombiano</div>
+        </div>
+      </div>
+    </div>
+    <div class="grid2" style="margin-top:10px;">
+      <div class="vs-box">
+        <div class="vb-title highlight-red">Cuándo APLICA el riesgo</div>
+        <ul class="check" style="margin-top:8px;">
+          <li class="bad">Ya hay deudas con proveedores ($2.267M)</li>
+          <li class="bad">Activos se transfieren después de adquirir las deudas</li>
+          <li class="bad">El acreedor prueba que la PN quedó insolvente</li>
+          <li class="bad">Plazo para ejercerla: 1 año desde que el acreedor conoce el acto (Art. 2492 CC)</li>
+        </ul>
+      </div>
+      <div class="vs-box">
+        <div class="vb-title highlight-green">Cómo MITIGAR el riesgo</div>
+        <ul class="check" style="margin-top:8px;">
+          <li>No transferir activos vinculados a deudas existentes</li>
+          <li>Solo incluir bienes claramente personales (casa, ahorros propios)</li>
+          <li>Documentar la transferencia con valor justo de mercado</li>
+          <li>Obtener concepto jurídico previo sobre solvencia residual</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎭 Riesgo 2 – Levantamiento del Velo Corporativo</h2>
+    <div class="risk-item warn" style="flex-direction:column;">
+      <div style="display:flex;gap:12px;">
+        <div class="ri-icon">🎭</div>
+        <div>
+          <div class="ri-title">¿Qué es?</div>
+          <div class="ri-body">Si la SAS y la PN no son verdaderamente independientes (misma cuenta bancaria, misma sede, activos mezclados, sin contabilidad separada), un juez puede "levantar el velo" y tratar la SAS como si fuera la misma persona de Alejandro — anulando toda protección.</div>
+          <div class="ri-norm">⚖️ Art. 207 C.Co., jurisprudencia CSJ</div>
+        </div>
+      </div>
+    </div>
+    <div class="grid3" style="margin-top:10px;">
+      <div class="vs-box">
+        <div class="vb-title">🚩 Señales de alerta</div>
+        <ul class="check" style="margin-top:8px;">
+          <li class="bad">Una sola cuenta corriente</li>
+          <li class="bad">SAS sin domicilio propio</li>
+          <li class="bad">No se pagan arriendos o fees entre PN y SAS</li>
+          <li class="bad">Contratos sin precio de mercado</li>
+          <li class="bad">Contabilidades mezcladas</li>
+        </ul>
+      </div>
+      <div class="vs-box">
+        <div class="vb-title">✅ Requisitos para protección válida</div>
+        <ul class="check" style="margin-top:8px;">
+          <li>Cuentas bancarias separadas</li>
+          <li>Contratos escritos entre PN y SAS</li>
+          <li>Precios a valor de mercado</li>
+          <li>Contabilidad totalmente independiente</li>
+          <li>Reuniones y actas de asamblea</li>
+        </ul>
+      </div>
+      <div class="vs-box">
+        <div class="vb-title">⚠️ Costo oculto</div>
+        <p style="font-size:0.82rem;color:var(--muted);margin-top:6px;">Mantener la independencia real entre PN y SAS requiere: contador para SAS, abogado para contratos, dos auditorías. Costo real: $5M–$12M/año adicionales.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🏦 Riesgo 3 – DIAN: Abuso Tributario y Precios de Transferencia</h2>
+    <div class="risk-item" style="flex-direction:column;">
+      <div style="display:flex;gap:12px;">
+        <div class="ri-icon">🏦</div>
+        <div>
+          <div class="ri-title">¿Cuándo aplica?</div>
+          <div class="ri-body">Si la SAS le arrienda activos a la PN, la DIAN puede cuestionar: (1) que el canon no sea de mercado, (2) que sea una estructura sin propósito económico real, (3) que busca mover gastos de la PN al negocio artificialmente.</div>
+          <div class="ri-norm">⚖️ Art. 869 ET (abuso en materia tributaria) · Concepto DIAN 000986/2021</div>
+        </div>
+      </div>
+    </div>
+    <div class="grid2" style="margin-top:10px;">
+      <div class="vs-box">
+        <div class="vb-title highlight-red">Consecuencias del cuestionamiento DIAN</div>
+        <ul class="check" style="margin-top:8px;">
+          <li class="bad">Rechazo de deducción de arrendamientos en PN</li>
+          <li class="bad">Reclasificación de ingresos de la SAS</li>
+          <li class="bad">Sanción por inexactitud: 100% del impuesto</li>
+          <li class="bad">Intereses de mora: 1.2× tasa de usura</li>
+          <li class="bad">Proceso de determinación oficial impuesto</li>
+        </ul>
+      </div>
+      <div class="vs-box">
+        <div class="vb-title highlight-green">Cómo protegerse</div>
+        <ul class="check" style="margin-top:8px;">
+          <li>Contratos de arrendamiento con canon de mercado</li>
+          <li>Avalúo de los activos antes de la transferencia</li>
+          <li>Propósito económico real documentado</li>
+          <li>Que la SAS tenga actividad genuina, no solo poseer bienes</li>
+          <li>Asesoría tributaria especializada previa</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>👷 Riesgo 4 – Pasivos Laborales: Siguen en PN</h2>
+    <div class="risk-item warn" style="flex-direction:column;">
+      <div style="display:flex;gap:12px;">
+        <div class="ri-icon">👷</div>
+        <div>
+          <div class="ri-title">El problema fundamental</div>
+          <div class="ri-body">Mientras los 10 empleados continúen contratados por Alejandro como PN, cualquier demanda laboral puede ejecutarse contra <strong>todos sus bienes personales</strong>, incluyendo los que estén "protegidos" en la SAS si se demuestra que son la misma persona (levantamiento del velo).</div>
+          <div class="ri-norm">⚖️ Art. 67 CST · Art. 303 CPT</div>
+        </div>
+      </div>
+    </div>
+    <div class="grid2" style="margin-top:10px;">
+      <div class="vs-box">
+        <div class="vb-title">Pasivos laborales latentes (10 empleados)</div>
+        <ul class="check" style="margin-top:8px;">
+          <li class="bad">Cesantías acumuladas no consignadas en FPCJ</li>
+          <li class="bad">Vacaciones no pagadas</li>
+          <li class="bad">Horas extras no reconocidas</li>
+          <li class="bad">Diferencia salarial si el contrato no corresponde a funciones</li>
+          <li class="bad">Acoso laboral / despido sin justa causa</li>
+        </ul>
+      </div>
+      <div class="vs-box">
+        <div class="vb-title">Monto aproximado en riesgo</div>
+        <div style="margin-top:10px;">
+          <div class="bar-row">
+            <div class="bar-label">Cesantías 1 año (10 emp. $2M promedio)</div>
+            <div class="bar-track"><div class="bar-fill" style="width:55%;background:#f59e0b;"></div></div>
+            <div class="bar-val">~$20M</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Posible indemnización (sin justa causa)</div>
+            <div class="bar-track"><div class="bar-fill" style="width:70%;background:#ef4444;"></div></div>
+            <div class="bar-val">~$60M</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">Demandas históricas (5 años)</div>
+            <div class="bar-track"><div class="bar-fill" style="width:90%;background:#ef4444;"></div></div>
+            <div class="bar-val">~$200M+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🔴 Riesgo 5 – Continuación como PN: Los Riesgos No Desaparecen</h2>
+    <div class="grid3">
+      <div class="risk-item" style="flex-direction:column;">
+        <div class="ri-icon">🏦</div>
+        <div>
+          <div class="ri-title">DIAN (Fiscalización)</div>
+          <div class="ri-body">Ingresos de $9.5B en PN son objetivo frecuente de fiscalización. Cualquier corrección puede generar sanciones sobre patrimonio personal.</div>
+        </div>
+      </div>
+      <div class="risk-item" style="flex-direction:column;">
+        <div class="ri-icon">📦</div>
+        <div>
+          <div class="ri-title">Proveedores y acreedores</div>
+          <div class="ri-body">Las CxP de $2.267M siguen siendo obligaciones personales de Alejandro. Un proveedor puede embargar inventarios y CxC del negocio.</div>
+        </div>
+      </div>
+      <div class="risk-item" style="flex-direction:column;">
+        <div class="ri-icon">⚡</div>
+        <div>
+          <div class="ri-title">Responsabilidad del propietario</div>
+          <div class="ri-body">Accidentes, daños a terceros, multas de tránsito, sanciones ambientales: todo recae personalmente sobre Alejandro como persona natural.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 4: ANÁLISIS FISCAL ===== -->
+<div class="page" id="page-fiscal">
+  <div class="hero">
+    <div class="badge">IMPACTO TRIBUTARIO</div>
+    <h1>🧮 Análisis Fiscal: PN vs SAS Bienes vs SAS Operativa</h1>
+    <p>Impuesto de renta, IVA, dividendos e impuesto al patrimonio en cada escenario</p>
+  </div>
+
+  <div class="pill-nav">
+    <button class="pill-btn active" onclick="showPill(this,'f-renta')">📊 Impuesto de Renta</button>
+    <button class="pill-btn" onclick="showPill(this,'f-dividendos')">💰 Dividendos</button>
+    <button class="pill-btn" onclick="showPill(this,'f-patrimonio')">🏦 Impuesto Patrimonio</button>
+    <button class="pill-btn" onclick="showPill(this,'f-resumen')">📋 Resumen Fiscal</button>
+  </div>
+
+  <div class="pill-content active" id="f-renta">
+    <div class="card">
+      <h2>📊 Carga Tributaria por Escenario (Renta Líquida ~$352M)</h2>
+      <div class="grid3">
+        <div class="kpi danger">
+          <div class="val">PN sin cambios</div>
+          <div class="lbl" style="margin-top:10px;font-size:0.85rem;font-weight:700;color:#f87171;">~$88.2M de impuesto</div>
+          <div class="lbl">Tarifa progresiva Art. 241 ET</div>
+          <div class="lbl" style="margin-top:8px;">Utilidad neta después de impuesto: <strong>$264M</strong></div>
+        </div>
+        <div class="kpi warn">
+          <div class="val">SAS solo bienes</div>
+          <div class="lbl" style="margin-top:10px;font-size:0.85rem;font-weight:700;color:#fbbf24;">~$88.2M PN + costos SAS</div>
+          <div class="lbl">Sin ahorro: operación sigue en PN con misma tarifa</div>
+          <div class="lbl" style="margin-top:8px;">Costo adicional SAS: $4M–$12M</div>
+        </div>
+        <div class="kpi ok">
+          <div class="val">SAS Operativa</div>
+          <div class="lbl" style="margin-top:10px;font-size:0.85rem;font-weight:700;color:#34d399;">~$123.4M (35% corporativo)</div>
+          <div class="lbl">Posible ahorro por NIIF + deducciones empresariales</div>
+          <div class="lbl" style="margin-top:8px;">+ Dividendos con tarifa especial</div>
+        </div>
+      </div>
+
+      <hr>
+      <h3>¿La SAS solo bienes ahorra impuestos?</h3>
+      <div class="alert warn">
+        <strong>⚠️ NO ahorra impuesto de renta si la operación sigue en PN</strong>
+        La renta líquida del negocio ($352M) seguirá tributando con la tarifa progresiva de persona natural. La SAS patrimonial solo tributaría por los <em>ingresos que genere ella misma</em> (ej. arriendos, rendimientos). Si solo tiene la casa y no la alquila, no genera renta y no reduce nada.
+      </div>
+      <div class="grid2" style="margin-top:10px;">
+        <div class="vs-box">
+          <div class="vb-title">Renta en SAS bienes Variante A (solo casa personal)</div>
+          <ul class="check" style="margin-top:8px;">
+            <li>Casa no arrendada → $0 de renta en SAS</li>
+            <li>SAS no tiene utilidades, no paga renta</li>
+            <li>PN sigue pagando $88M por el negocio</li>
+            <li>Costo SAS: $4M–$8M/año para nada fiscal</li>
+          </ul>
+        </div>
+        <div class="vs-box">
+          <div class="vb-title">Renta en SAS bienes Variante B (activos del negocio)</div>
+          <ul class="check" style="margin-top:8px;">
+            <li>SAS cobra arriendo a PN por inventarios y PP&E</li>
+            <li>Ese arriendo es ingreso de la SAS → tributa 35%</li>
+            <li>PN deduce el arriendo → ahorra en PN</li>
+            <li class="warn">Efecto neto: puede ser neutro o incluso peor</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pill-content" id="f-dividendos">
+    <div class="card">
+      <h2>💰 Tributación de Dividendos (Solo en SAS Operativa)</h2>
+      <div class="alert info">
+        <strong>ℹ️ Aplica solo cuando la operación está en la SAS</strong>
+        Si se crea una SAS solo para bienes y la operación sigue en PN, NO hay dividendos que declarar. Los dividendos solo existen cuando la sociedad tiene utilidades que distribuye a sus accionistas.
+      </div>
+      <div class="grid2">
+        <div class="vs-box">
+          <div class="vb-title">1ª Sub-cédula de dividendos (Art. 242 ET)</div>
+          <table style="margin-top:10px;">
+            <thead><tr><th>Rango</th><th>Tarifa</th></tr></thead>
+            <tbody>
+              <tr><td>Hasta 1.090 UVT (~$58M)</td><td><span class="tag green">0%</span></td></tr>
+              <tr><td>Más de 1.090 UVT</td><td><span class="tag yellow">15%</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="vs-box">
+          <div class="vb-title">2ª Sub-cédula de dividendos (gravados)</div>
+          <table style="margin-top:10px;">
+            <thead><tr><th>Concepto</th><th>Tarifa</th></tr></thead>
+            <tbody>
+              <tr><td>Dividendos no gravados en SAS</td><td><span class="tag yellow">15%</span></td></tr>
+              <tr><td>Dividendos gravados en SAS</td><td><span class="tag red">35% + 15%</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="alert warn" style="margin-top:14px;">
+        <strong>⚠️ La SAS paga más impuesto total que la PN si se distribuyen dividendos</strong>
+        35% corporativo + 15% dividendos = ~44.75% efectivo vs. tasa PN ~25% sobre la misma utilidad. La ventaja real de la SAS es la protección patrimonial, NO el ahorro fiscal directo.
+      </div>
+    </div>
+  </div>
+
+  <div class="pill-content" id="f-patrimonio">
+    <div class="card">
+      <h2>🏦 Impuesto al Patrimonio – ¿Cambia con la SAS?</h2>
+      <div class="grid2">
+        <div>
+          <h3>Patrimonio líquido como PN</h3>
+          <div style="overflow-x:auto;">
+            <table>
+              <thead><tr><th>Activo</th><th>Valor</th></tr></thead>
+              <tbody>
+                <tr><td>Inventarios</td><td>$1.746.585.000</td></tr>
+                <tr><td>Cuentas x cobrar</td><td>$1.855.547.000</td></tr>
+                <tr><td>Casa habitación</td><td>$128.004.147</td></tr>
+                <tr><td>Efectivo</td><td>$93.990.000</td></tr>
+                <tr><td>PP&E neto</td><td>$72.574.210</td></tr>
+                <tr><td>Otros</td><td>$166.585.000</td></tr>
+                <tr><td>(-) Deudas</td><td>($2.267.543.000)</td></tr>
+                <tr style="font-weight:700;"><td>Patrimonio líquido</td><td>$1.795.742.000</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="alert ok" style="margin-top:12px;">
+            <strong>✅ Umbral impuesto patrimonio 2025: ~$2.736M</strong>
+            El patrimonio líquido de Alejandro ($1.795M) está <strong>POR DEBAJO</strong> del umbral. No paga impuesto al patrimonio actualmente.
+          </div>
+        </div>
+        <div>
+          <h3>Escenario con SAS Operativa</h3>
+          <p style="font-size:0.85rem;color:var(--muted);margin-bottom:12px;">Al aportar activos del negocio a la SAS, en la PN quedan solo las <strong>acciones</strong> de la SAS (activo). Pueden aplicar exclusiones:</p>
+          <div class="vs-box">
+            <div class="vb-title">Exclusión del art. 295-3 ET</div>
+            <p style="font-size:0.82rem;color:var(--muted);margin-top:6px;">Las acciones en sociedades colombianas pueden excluirse del patrimonio para efectos del impuesto al patrimonio hasta ciertos límites. Requiere concepto tributario especializado.</p>
+          </div>
+          <div class="alert warn" style="margin-top:10px;">
+            <strong>⚠️ Si el patrimonio personal creciera (ej. reinversiones) y superara $2.736M</strong>
+            Pagaría impuesto al patrimonio con tarifa del 1.5% (art. 296-3 ET). Una razón adicional para estructurar la SAS correctamente.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pill-content" id="f-resumen">
+    <div class="card">
+      <h2>📋 Resumen: ¿Qué ahorra o cuesta cada estructura?</h2>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Tributo</th>
+              <th>PN sin cambios</th>
+              <th>SAS solo bienes</th>
+              <th>SAS operativa</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Renta del negocio</td>
+              <td>~$88.2M</td>
+              <td>~$88.2M <span class="tag yellow">= sin cambio</span></td>
+              <td>~$123.4M <span class="tag red">+35M bruto</span></td>
+            </tr>
+            <tr>
+              <td>Dividendos accionista</td>
+              <td>N/A</td>
+              <td>N/A</td>
+              <td>15%–35% adicional</td>
+            </tr>
+            <tr>
+              <td>Impuesto patrimonio</td>
+              <td>$0 (bajo umbral)</td>
+              <td>$0 (bajo umbral)</td>
+              <td>$0 (acciones excluibles)</td>
+            </tr>
+            <tr>
+              <td>IVA operativo</td>
+              <td>Igual</td>
+              <td>Igual (en PN)</td>
+              <td>Igual (en SAS)</td>
+            </tr>
+            <tr>
+              <td>Costo adicional/año</td>
+              <td>$0</td>
+              <td><span class="tag red">$4M–$12M</span></td>
+              <td><span class="tag yellow">$8M–$20M</span></td>
+            </tr>
+            <tr style="font-weight:700;">
+              <td>Carga fiscal neta</td>
+              <td>$88.2M</td>
+              <td>$92M–$100M</td>
+              <td>$123M + dividendos</td>
+            </tr>
+            <tr>
+              <td>Protección patrimonial</td>
+              <td><span class="tag red">Ninguna</span></td>
+              <td><span class="tag yellow">Parcial</span></td>
+              <td><span class="tag green">Completa</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert info" style="margin-top:14px;">
+        <strong>🔑 La clave para la SAS operativa</strong>
+        La SAS paga más impuesto bruto, pero la protección patrimonial y las posibilidades de reinversión, planeación y expansión justifican el costo. El ahorro fiscal real se logra en el largo plazo mediante estructuración de dividendos y retención de utilidades en la sociedad.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 5: PROTECCIÓN REAL ===== -->
+<div class="page" id="page-proteccion">
+  <div class="hero">
+    <div class="badge">ANÁLISIS DE PROTECCIÓN</div>
+    <h1>🔒 ¿Qué activos quedan realmente protegidos?</h1>
+    <p>Análisis por activo según el escenario elegido</p>
+  </div>
+
+  <div class="card">
+    <h2>🗂️ Mapa de Protección por Activo</h2>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Activo</th>
+            <th>Valor</th>
+            <th>PN sin cambios</th>
+            <th>SAS solo bienes (Var. A – personales)</th>
+            <th>SAS solo bienes (Var. B – negocio)</th>
+            <th>SAS Operativa</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>🏠 Casa habitual</strong></td>
+            <td>$128M</td>
+            <td><span class="tag red">❌ Embargable</span></td>
+            <td><span class="tag green">✅ En SAS</span></td>
+            <td><span class="tag red">❌ Sigue en PN</span></td>
+            <td><span class="tag green">✅ Fuera de SAS</span></td>
+          </tr>
+          <tr>
+            <td><strong>📦 Inventarios</strong></td>
+            <td>$1.747M</td>
+            <td><span class="tag red">❌ Embargable</span></td>
+            <td><span class="tag red">❌ Sigue en PN</span></td>
+            <td><span class="tag yellow">⚠ Riesgo pauliana</span></td>
+            <td><span class="tag green">✅ En SAS</span></td>
+          </tr>
+          <tr>
+            <td><strong>💳 Cuentas x cobrar</strong></td>
+            <td>$1.856M</td>
+            <td><span class="tag red">❌ Embargable</span></td>
+            <td><span class="tag red">❌ Sigue en PN</span></td>
+            <td><span class="tag yellow">⚠ Riesgo pauliana</span></td>
+            <td><span class="tag green">✅ En SAS</span></td>
+          </tr>
+          <tr>
+            <td><strong>💵 Efectivo / caja</strong></td>
+            <td>$94M</td>
+            <td><span class="tag red">❌ Embargable</span></td>
+            <td><span class="tag yellow">⚠ Difícil probar separación</span></td>
+            <td><span class="tag yellow">⚠ Mixto</span></td>
+            <td><span class="tag green">✅ En SAS</span></td>
+          </tr>
+          <tr>
+            <td><strong>🚗 PP&E (vehículos / equipos)</strong></td>
+            <td>$73M</td>
+            <td><span class="tag red">❌ Embargable</span></td>
+            <td><span class="tag red">❌ Sigue en PN</span></td>
+            <td><span class="tag yellow">⚠ Riesgo pauliana</span></td>
+            <td><span class="tag green">✅ En SAS</span></td>
+          </tr>
+          <tr>
+            <td><strong>📊 Otros activos</strong></td>
+            <td>$167M</td>
+            <td><span class="tag red">❌ Embargable</span></td>
+            <td><span class="tag yellow">⚠ Depende del activo</span></td>
+            <td><span class="tag yellow">⚠ Depende</span></td>
+            <td><span class="tag green">✅ En SAS</span></td>
+          </tr>
+          <tr style="background:#ef444410;">
+            <td><strong>💰 PATRIMONIO EN RIESGO</strong></td>
+            <td></td>
+            <td><strong>$4.063M (100%)</strong></td>
+            <td><strong>~$3.935M (97%)</strong></td>
+            <td><strong>~$221M (5%)</strong></td>
+            <td><strong>$128M (3%)</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>⚡ Activos con Protección Legal Especial (sin necesidad de SAS)</h2>
+    <div class="grid2">
+      <div class="risk-item ok" style="flex-direction:column;">
+        <div style="display:flex;gap:12px;">
+          <div class="ri-icon">🏠</div>
+          <div>
+            <div class="ri-title">Afectación a Vivienda Familiar (Art. 38 Ley 3/1991)</div>
+            <div class="ri-body">La vivienda habitual de Alejandro puede marcarse como "afectada a vivienda familiar" en la escritura. Esto la protege de embargos por deudas del propietario. Es gratuita y no requiere crear una sociedad.</div>
+            <div class="ri-norm">✅ Trámite: Notaría. Costo: ~$80.000 honorarios. Sin impuestos.</div>
+          </div>
+        </div>
+      </div>
+      <div class="risk-item ok" style="flex-direction:column;">
+        <div style="display:flex;gap:12px;">
+          <div class="ri-icon">👨‍👩‍👧</div>
+          <div>
+            <div class="ri-title">Patrimonio de Familia Inembargable (Art. 60 Ley 9/1989)</div>
+            <div class="ri-body">Para familias con hijos menores, la vivienda puede declararse como patrimonio de familia, siendo absolutamente inembargable. Aplica solo para la vivienda habitual.</div>
+            <div class="ri-norm">✅ Trámite: Notaría o Registraduría. Sin costo de impuesto.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="alert ok" style="margin-top:10px;">
+      <strong>💡 Recomendación inmediata (independiente de cualquier decisión sobre SAS)</strong>
+      Cualquiera sea la estructura que elija Alejandro, la vivienda ($128M) debe protegerse hoy mismo mediante Afectación a Vivienda Familiar. Es el paso más rápido, económico y efectivo disponible.
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 6: REQUISITOS ===== -->
+<div class="page" id="page-requisitos">
+  <div class="hero">
+    <div class="badge">CUMPLIMIENTO</div>
+    <h1>📋 Requisitos para que la SAS Patrimonial Sea Válida</h1>
+    <p>Si decide crear una SAS solo para bienes, debe cumplir estos requisitos para que la protección sea real</p>
+  </div>
+
+  <div class="alert danger">
+    <strong>🔴 Sin estos requisitos, la protección es ilusoria</strong>
+    Un juez o la DIAN pueden desconocer la SAS si no hay separación real entre la persona y la sociedad.
+  </div>
+
+  <div class="card">
+    <h2>📝 Paso a Paso: Constitución de SAS Patrimonial</h2>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="st-title">Inventario y avalúo de bienes a transferir</div>
+        <div class="st-desc">Identificar exactamente qué bienes entran a la SAS. Obtener avalúo comercial de cada activo (avaluador certificado). Documentar que los bienes son libres de hipotecas o que los acreedores consienten la transferencia.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="st-title">Concepto jurídico sobre solvencia residual</div>
+        <div class="st-desc">Un abogado debe certificar que después de la transferencia, la PN mantiene suficientes activos para responder por sus deudas actuales ($2.267M en CxP). Si queda insolvente, la acción pauliana procede fácilmente.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="st-title">Redacción de estatutos SAS patrimonial</div>
+        <div class="st-desc">Objeto social claro: "tenencia, administración y arrendamiento de bienes muebles e inmuebles". Prohibir expresamente actividades comerciales. Capital en acciones equivalente al avalúo de los activos aportados.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="st-title">Escritura o documento privado + registro</div>
+        <div class="st-desc">SAS puede constituirse por documento privado (Ley 1258/2008). Si se aportan inmuebles, requiere escritura pública y registro en Catastro. Si son muebles, documento privado reconocido ante notario o con presentación personal.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="st-title">Inscripción en Cámara de Comercio y DIAN</div>
+        <div class="st-desc">Registro mercantil de la SAS. RUT de la SAS. Cuentas bancarias propias a nombre de la SAS. Firma autorizada diferente a la PN (o con protocolos claros cuando es la misma persona).</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <div class="st-title">Contratos entre PN y SAS (si aplica)</div>
+        <div class="st-desc">Si la SAS le arrienda activos a la PN, debe haber contrato de arrendamiento escrito, a precio de mercado, con canon mensual real pagado. Sin esto, la DIAN puede rechazar las deducciones de la PN.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">7</div>
+      <div class="step-body">
+        <div class="st-title">Contabilidad separada e independiente</div>
+        <div class="st-desc">La SAS necesita su propio libro de contabilidad (NIIF Pymes si aplica), declaraciones tributarias, cuenta corriente separada, y estados financieros anuales firmados por contador. Sin esto, el velo corporativo cae.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">8</div>
+      <div class="step-body">
+        <div class="st-title">Asamblea anual y actas</div>
+        <div class="st-desc">Aunque Alejandro sea único accionista, debe celebrar asamblea anual, aprobar estados financieros y dejar actas. Esto demuestra que la SAS funciona como una entidad real y no es simulada.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>💰 Costos de Mantener una SAS Patrimonial Válida</h2>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr><th>Concepto</th><th>Costo PN actual</th><th>Costo SAS patrimonial</th><th>Diferencial</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cámara de Comercio (matrícula anual)</td>
+            <td>~$200.000</td>
+            <td>~$200.000–$600.000 (adicional)</td>
+            <td><span class="tag yellow">+$200K–$600K</span></td>
+          </tr>
+          <tr>
+            <td>Contador / revisoría fiscal</td>
+            <td>Incluido en honorarios PN</td>
+            <td>$2M–$6M/año (contabilidad SAS)</td>
+            <td><span class="tag red">+$2M–$6M</span></td>
+          </tr>
+          <tr>
+            <td>Revisoría fiscal SAS (si supera umbral)</td>
+            <td>No aplica</td>
+            <td>$4M–$10M/año (si ingresos > $4.27B)</td>
+            <td><span class="tag red">+$0 a $10M</span></td>
+          </tr>
+          <tr>
+            <td>Software contable SAS</td>
+            <td>Incluido en PN</td>
+            <td>$1M–$3M/año</td>
+            <td><span class="tag yellow">+$1M–$3M</span></td>
+          </tr>
+          <tr>
+            <td>Avalúos iniciales bienes</td>
+            <td>$0</td>
+            <td>$500K–$2M (costo único)</td>
+            <td><span class="tag yellow">+$500K–$2M único</span></td>
+          </tr>
+          <tr>
+            <td>Impuestos por transferencia bienes</td>
+            <td>$0</td>
+            <td>ICA, impuesto registro, notaría</td>
+            <td><span class="tag red">Variable por bien</span></td>
+          </tr>
+          <tr style="font-weight:700;background:#1a2744;">
+            <td>TOTAL ADICIONAL ANUAL</td>
+            <td>–</td>
+            <td>$3.2M – $19.6M</td>
+            <td><span class="tag red">Sin ahorro fiscal</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="alert warn" style="margin-top:14px;">
+      <strong>⚠️ Una SAS patrimonial cuesta tanto como una SAS operativa</strong>
+      Pero sin los beneficios fiscales ni la protección completa de una SAS operativa. Relación costo-beneficio desfavorable.
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 7: ALTERNATIVAS ===== -->
+<div class="page" id="page-alternativas">
+  <div class="hero">
+    <div class="badge">ALTERNATIVAS</div>
+    <h1>💡 Estructuras Alternativas de Protección</h1>
+    <p>Más allá de la SAS: opciones para proteger el patrimonio de Alejandro</p>
+  </div>
+
+  <div class="grid2" style="margin-bottom:18px;">
+    <div class="card">
+      <h3>🏠 Alternativa 1 – Afectación a Vivienda (Ley 3/1991)</h3>
+      <div class="kpi ok" style="margin-bottom:12px;text-align:left;padding:10px;">
+        <div style="font-size:0.75rem;color:var(--muted);">Costo</div>
+        <div style="font-weight:700;color:var(--ok);font-size:1.1rem;">~$80.000</div>
+        <div style="font-size:0.72rem;color:var(--muted);">Solo honorarios de notaría</div>
+      </div>
+      <ul class="check">
+        <li>Protege la vivienda habitual ($128M)</li>
+        <li>Inembargable por deudas del titular</li>
+        <li>Trámite notarial simple: 1 día</li>
+        <li>No requiere sociedad</li>
+        <li>No genera costos anuales</li>
+        <li class="warn">Solo protege la vivienda (no inventarios, CxC)</li>
+        <li class="warn">Si hay cónyuge, requiere consentimiento</li>
+      </ul>
+      <div class="alert ok" style="margin-top:10px;">
+        <strong>✅ Acción inmediata recomendada sin importar la otra decisión</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🤝 Alternativa 2 – Sociedad Conyugal / Capitulaciones</h3>
+      <div class="kpi info" style="margin-bottom:12px;text-align:left;padding:10px;">
+        <div style="font-size:0.75rem;color:var(--muted);">Costo</div>
+        <div style="font-weight:700;color:var(--info);font-size:1.1rem;">$300K–$2M</div>
+        <div style="font-size:0.72rem;color:var(--muted);">Escritura de capitulaciones matrimoniales</div>
+      </div>
+      <ul class="check">
+        <li>Separación de bienes entre cónyuge/compañero</li>
+        <li>Bienes del cónyuge no responden por deudas de Alejandro</li>
+        <li>Escritura ante notario</li>
+        <li>Válida si se hace ANTES de contraer deudas</li>
+        <li class="warn">Solo aplica si hay sociedad conyugal activa</li>
+        <li class="warn">No protege bienes propios de Alejandro</li>
+        <li class="warn">Puede ser atacada si es fraudulenta</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>🏦 Alternativa 3 – Fideicomiso de Administración</h3>
+      <div class="kpi purple" style="margin-bottom:12px;text-align:left;padding:10px;">
+        <div style="font-size:0.75rem;color:var(--muted);">Costo</div>
+        <div style="font-weight:700;color:var(--purple);font-size:1.1rem;">$8M–$25M/año</div>
+        <div style="font-size:0.72rem;color:var(--muted);">Comisión fiduciaria + estructuración</div>
+      </div>
+      <ul class="check">
+        <li>Activos transferidos a una fiduciaria</li>
+        <li>Separación patrimonial absoluta</li>
+        <li>El fideicomitente puede seguir beneficiándose</li>
+        <li>Protección más sólida que SAS frente a acreedores</li>
+        <li class="bad">Alto costo: comisión 0.1%–0.5% anual del patrimonio</li>
+        <li class="bad">Requiere fiduciaria vigilada por SFC</li>
+        <li class="warn">Menos flexible que SAS para operaciones</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>🏗️ Alternativa 4 – Estructura Doble (RECOMENDADA)</h3>
+      <div class="kpi ok" style="margin-bottom:12px;text-align:left;padding:10px;">
+        <div style="font-size:0.75rem;color:var(--muted);">Resultado</div>
+        <div style="font-weight:700;color:var(--ok);font-size:1.1rem;">Protección Máxima</div>
+        <div style="font-size:0.72rem;color:var(--muted);">SAS Operativa + Vivienda Familiar</div>
+      </div>
+      <ul class="check">
+        <li>SAS Operativa: todo el negocio, empleados, activos</li>
+        <li>Afectación vivienda familiar: protege la casa</li>
+        <li>Alejandro solo tiene acciones de la SAS + casa protegida</li>
+        <li>Protección completa de todos los activos</li>
+        <li>Optimización fiscal corporativa posible</li>
+        <li class="warn">Requiere Revisoría Fiscal obligatoria</li>
+        <li class="warn">Costo adicional: $8M–$20M/año</li>
+      </ul>
+      <div class="alert ok" style="margin-top:10px;">
+        <strong>✅ Esta es la estructura más eficiente para el perfil de Alejandro</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📊 Comparativo de Alternativas</h2>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Estructura</th>
+            <th>Protección</th>
+            <th>Costo inicial</th>
+            <th>Costo anual</th>
+            <th>Complejidad</th>
+            <th>Recomendación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Afectación vivienda</td>
+            <td><span class="tag yellow">Solo casa</span></td>
+            <td>$80K</td>
+            <td>$0</td>
+            <td><span class="tag green">Muy baja</span></td>
+            <td><span class="tag green">✅ Hacer ya</span></td>
+          </tr>
+          <tr>
+            <td>Capitulaciones</td>
+            <td><span class="tag yellow">Bienes cónyuge</span></td>
+            <td>$300K–$2M</td>
+            <td>$0</td>
+            <td><span class="tag green">Baja</span></td>
+            <td><span class="tag yellow">⚠ Si aplica</span></td>
+          </tr>
+          <tr>
+            <td>SAS solo bienes (Var. A)</td>
+            <td><span class="tag yellow">Parcial</span></td>
+            <td>$2M–$5M</td>
+            <td>$3M–$12M</td>
+            <td><span class="tag red">Alta</span></td>
+            <td><span class="tag red">❌ No eficiente</span></td>
+          </tr>
+          <tr>
+            <td>SAS solo bienes (Var. B)</td>
+            <td><span class="tag red">Riesgo legal alto</span></td>
+            <td>$3M–$8M</td>
+            <td>$5M–$15M</td>
+            <td><span class="tag red">Muy alta</span></td>
+            <td><span class="tag red">❌ Desaconsejada</span></td>
+          </tr>
+          <tr>
+            <td>Fideicomiso</td>
+            <td><span class="tag green">Alta</span></td>
+            <td>$5M–$15M</td>
+            <td>$8M–$25M</td>
+            <td><span class="tag red">Muy alta</span></td>
+            <td><span class="tag yellow">⚠ Para patrimonios mayores</span></td>
+          </tr>
+          <tr style="background:#10b98110;">
+            <td><strong>SAS Operativa + Vivienda</strong></td>
+            <td><span class="tag green">✅ Completa</span></td>
+            <td>$3M–$8M</td>
+            <td>$8M–$20M</td>
+            <td><span class="tag yellow">Moderada</span></td>
+            <td><span class="tag green">✅ RECOMENDADA</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAGE 8: RECOMENDACIÓN ===== -->
+<div class="page" id="page-recomendacion">
+  <div class="hero">
+    <div class="badge">RECOMENDACIÓN FINAL</div>
+    <h1>✅ Recomendación Final para Alejandro Forero</h1>
+    <p>Síntesis ejecutiva con el plan de acción óptimo</p>
+  </div>
+
+  <div class="alert danger">
+    <strong>🔴 Si se crea solo una SAS para bienes y la operación sigue en PN:</strong>
+    Los riesgos comerciales, laborales y fiscales sobre el patrimonio personal de Alejandro <strong>CONTINÚAN INTACTOS</strong>. La SAS solo bienes es una protección parcial que tiene costos similares a la SAS operativa sin sus beneficios.
+  </div>
+
+  <div class="card">
+    <h2>🏆 Plan Óptimo: Dos Acciones Combinadas</h2>
+    <div class="grid2">
+      <div>
+        <h3 style="color:var(--ok);margin-bottom:12px;">Acción 1 – INMEDIATA (esta semana)</h3>
+        <div class="step">
+          <div class="step-num" style="background:var(--ok);">A</div>
+          <div class="step-body">
+            <div class="st-title">Afectación a Vivienda Familiar</div>
+            <div class="st-desc">Ir a la notaría con escritura de la casa. Declarar afectación a vivienda familiar. Costo: ~$80.000. Protege inmediatamente los $128M de la vivienda.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:var(--ok);">B</div>
+          <div class="step-body">
+            <div class="st-title">Auditoría laboral preventiva</div>
+            <div class="st-desc">Revisar los contratos de los 10 empleados, cesantías, vacaciones y liquidaciones antes de cualquier transición. Identificar pasivos ocultos que deban saldarse con la PN.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="color:var(--accent);margin-bottom:12px;">Acción 2 – CORTO PLAZO (1–3 meses)</h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="st-title">Constituir SAS Operativa</div>
+            <div class="st-desc">Trasladar el negocio completo (inventarios, CxC, PP&E, empleados) a la SAS. Este es el único mecanismo que elimina verdaderamente la responsabilidad ilimitada.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="st-title">Sustitución Patronal (Art. 67 CST)</div>
+            <div class="st-desc">Pasar los 10 empleados a la SAS sin liquidarlos. Preserva antigüedad, ahorra costos de liquidación y evita conflictos laborales.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="st-title">Contratar Revisor Fiscal</div>
+            <div class="st-desc">Obligatorio desde año 1 (ingresos $9.5B > 3.000 SMLMV = $4.27B). Buscar revisor antes de iniciar operaciones en la SAS.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🚦 Semáforo de Decisión</h2>
+    <div class="risk-item ok" style="flex-direction:column;">
+      <div class="semaforo">
+        <div class="sem-dot g"></div>
+        <div>
+          <div class="ri-title">SAS OPERATIVA + Afectación Vivienda (RECOMENDADA)</div>
+          <div class="ri-body">Protección máxima. La operación migra a SAS. La vivienda queda protegida por ley. Costo adicional $8M–$20M/año = 0.2% de $9.5B ingresos. Relación costo-beneficio óptima.</div>
+        </div>
+      </div>
+    </div>
+    <div class="risk-item warn" style="flex-direction:column;">
+      <div class="semaforo">
+        <div class="sem-dot y"></div>
+        <div>
+          <div class="ri-title">Solo Afectación Vivienda (Medida mínima inmediata)</div>
+          <div class="ri-body">Si no se puede crear la SAS ahora, esta medida protege la vivienda ($128M) de manera inmediata y gratuita. No protege los demás activos ni elimina responsabilidad ilimitada.</div>
+        </div>
+      </div>
+    </div>
+    <div class="risk-item" style="flex-direction:column;">
+      <div class="semaforo">
+        <div class="sem-dot r"></div>
+        <div>
+          <div class="ri-title">SAS Solo para Bienes (Variante B – activos del negocio)</div>
+          <div class="ri-body">No recomendada. Alto riesgo de acción pauliana (deudas $2.267M ya existen). Doble contabilidad sin protección efectiva. Puede ser atacada por DIAN (Art. 869 ET) y acreedores (Art. 2491 CC).</div>
+        </div>
+      </div>
+    </div>
+    <div class="risk-item" style="flex-direction:column;border-left-color:var(--danger);">
+      <div class="semaforo">
+        <div class="sem-dot r"></div>
+        <div>
+          <div class="ri-title">Continuar solo como PN sin ninguna acción</div>
+          <div class="ri-body">Altamente desaconsejado. $4.063M de patrimonio expuesto sin ninguna protección. Riesgo laboral, comercial, fiscal y penal sobre bienes personales de Alejandro y su familia.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📞 Próximos Pasos Concretos</h2>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr><th>#</th><th>Acción</th><th>Quién</th><th>Plazo</th><th>Costo estimado</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><strong>Afectar vivienda familiar</strong> ante notaría</td>
+            <td>Alejandro + Cónyuge</td>
+            <td><span class="tag green">Esta semana</span></td>
+            <td>~$80.000</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Auditoría laboral: revisar contratos y pasivos de los 10 empleados</td>
+            <td>Abogado laboral</td>
+            <td><span class="tag yellow">Semana 1–2</span></td>
+            <td>$500K–$2M</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Avalúo de inventarios, PP&E y cartera para aporte a SAS</td>
+            <td>Avaluador + Contador</td>
+            <td><span class="tag yellow">Semana 2–3</span></td>
+            <td>$500K–$1.5M</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Constitución SAS operativa (documento privado)</td>
+            <td>Abogado societario</td>
+            <td><span class="tag yellow">Semana 3–4</span></td>
+            <td>$800K–$2M</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Registro Cámara de Comercio + RUT SAS</td>
+            <td>Abogado / Contador</td>
+            <td><span class="tag yellow">Semana 4</span></td>
+            <td>$200K–$600K</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>Sustitución patronal 10 empleados (acta + PILA)</td>
+            <td>Abogado laboral + Contador</td>
+            <td><span class="tag yellow">Mes 2</span></td>
+            <td>$500K–$1.5M</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>Contratación Revisor Fiscal</td>
+            <td>Alejandro + Jorge Estrada</td>
+            <td><span class="tag yellow">Mes 2</span></td>
+            <td>$4M–$10M/año</td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td>Transferencia activos PN → SAS (facturación)</td>
+            <td>Contador</td>
+            <td><span class="tag yellow">Mes 2–3</span></td>
+            <td>Incluido</td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td>Cierre contable PN + apertura libros SAS</td>
+            <td>Jorge Estrada</td>
+            <td><span class="tag yellow">Mes 3</span></td>
+            <td>Honorarios normales</td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td>Revisión un año después: evaluar estructura y optimización</td>
+            <td>Jorge Estrada</td>
+            <td><span class="tag blue">Año 1</span></td>
+            <td>Honorarios asesoría</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="alert ok">
+    <strong>✅ Conclusión ejecutiva</strong>
+    La SAS creada SOLO para bienes es una medida de protección <em>incompleta</em> que tiene costos similares a la solución completa, pero sin eliminar el riesgo principal: la responsabilidad ilimitada de Alejandro como PN mientras siga operando el negocio. La estrategia óptima es: (1) afectar la vivienda ya, y (2) constituir la SAS operativa para trasladar el negocio completo. Esto transforma la exposición de $4.063M a prácticamente $0 en el patrimonio personal de Alejandro.
+  </div>
+
+  <div style="text-align:center;margin-top:20px;color:var(--muted);font-size:0.8rem;">
+    <strong>Asesor:</strong> Jorge Estrada · contador@lacarolina.com.co · Julio 2026<br>
+    <em>Este documento es material de asesoría para discusión. Las decisiones jurídicas deben contar con opinión de abogado y tributarista. Normativa: Ley 1258/2008, ET, CC art. 2491, CST art. 67, Ley 3/1991.</em>
+  </div>
+</div>
+
+<div class="footer">
+  🏛️ Forero Rueda – Análisis SAS Patrimonial · Jorge Estrada Contador · contador@lacarolina.com.co · Julio 2026
+</div>
+
+<script>
+function showPage(btn, id) {
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.nav-btn').forEach(function(b){ b.classList.remove('active'); });
+  var pg = document.getElementById('page-' + id);
+  if (pg) { pg.classList.add('active'); }
+  if (btn) { btn.classList.add('active'); }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function showPill(btn, id) {
+  var card = btn.closest('.card');
+  if (!card) card = btn.parentElement.parentElement;
+  card.querySelectorAll('.pill-btn').forEach(function(t){ t.classList.remove('active'); });
+  card.querySelectorAll('.pill-content').forEach(function(c){ c.classList.remove('active'); });
+  btn.classList.add('active');
+  var el = document.getElementById(id);
+  if (el) el.classList.add('active');
+}
+</script>
+</body>
+</html>
